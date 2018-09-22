@@ -1,5 +1,6 @@
 package com.insomniacgks.newmoviesandshows.data;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
@@ -32,10 +33,13 @@ import java.util.ArrayList;
 import static com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions.withCrossFade;
 
 public class GetCast extends AsyncTask<String, Void, ArrayList<String[]>> {
+    @SuppressLint("StaticFieldLeak")
     private Context context;
     private int id;
+    @SuppressLint("StaticFieldLeak")
     private RecyclerView recyclerView;
     private String type;
+    @SuppressLint("StaticFieldLeak")
     private RelativeLayout relativeLayout;
 
     public GetCast(Context context, int id, RecyclerView recyclerView, String type, RelativeLayout relativeLayout) {
