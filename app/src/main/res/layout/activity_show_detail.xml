@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.ShowDetailActivity">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@+id/show_details_rl"
+            android:layout_alignParentTop="true">
+
+            <ImageView
+                android:id="@+id/show_backdrop"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                tools:ignore="ContentDescription" />
+
+            <eightbitlab.com.blurview.BlurView
+                android:id="@+id/blur_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="#3f000000"
+            android:id="@+id/show_details_rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp">
+
+            <ImageView
+                android:transitionName="testing"
+                android:id="@+id/tv_show_poster"
+                android:layout_width="140dp"
+                android:layout_height="200dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/show_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/tv_show_poster"
+                android:layout_marginEnd="4dp"
+                android:layout_marginStart="16dp"
+                android:layout_toEndOf="@+id/tv_show_poster"
+                android:text="@string/app_name"
+                android:textColor="@android:color/white"
+                android:textSize="14dp"
+                android:textStyle="bold"
+                tools:ignore="SpUsage" />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_alignBottom="@+id/show_rating"
+                android:layout_alignStart="@+id/show_name"
+                android:layout_below="@+id/show_name"
+                android:layout_marginTop="12dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_star_white"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/show_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/show_name"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="12dp"
+                android:layout_toEndOf="@+id/imageView2"
+                android:text="9.2"
+                android:textColor="@android:color/white"
+                android:textSize="14dp"
+                tools:ignore="SpUsage" />
+
+            <TextView
+                android:id="@+id/show_runtime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/show_name"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="12dp"
+                android:layout_toEndOf="@+id/show_rating"
+                android:text="2016"
+                android:textColor="@android:color/white"
+                android:textSize="14dp"
+                tools:ignore="SpUsage" />
+
+            <TextView
+                android:id="@+id/show_genres"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/imageView2"
+                android:layout_below="@+id/imageView2"
+                android:layout_marginTop="12dp"
+                android:textColor="@android:color/white"
+                android:textSize="14dp"
+                tools:ignore="SpUsage" />
+
+            <TextView
+                android:id="@+id/show_networks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/show_genres"
+                android:layout_below="@+id/show_genres"
+                android:layout_marginEnd="4dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/app_name"
+                android:textColor="@android:color/white"
+                android:textSize="14dp"
+                tools:ignore="SpUsage" />
+
+            <TextView
+                android:id="@+id/homepage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/show_networks"
+                android:layout_below="@+id/show_networks"
+                android:layout_marginTop="12dp"
+                android:autoLink="web|all"
+                android:textColor="@android:color/white"
+                android:textSize="14dp"
+                tools:ignore="SpUsage" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/show_overview_rl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/show_details_rl"
+            android:background="@android:color/white"
+            android:paddingBottom="8dp"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:id="@+id/show_overview_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/show_overview"
+                android:textColor="@android:color/black"
+                android:textSize="14dp"
+                android:textStyle="bold"
+                tools:ignore="SpUsage" />
+
+            <TextView
+                android:id="@+id/show_overview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/show_overview_tv"
+                android:layout_marginTop="8dp"
+                android:textColor="@android:color/black"
+                android:textSize="14dp"
+                tools:ignore="SpUsage" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/show_seasons_rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/show_overview_rl"
+            android:background="@android:color/white"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:id="@+id/show_seasons_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
+                android:text="Seasons:"
+                android:textColor="@android:color/black"
+                android:textSize="14dp"
+                android:textStyle="bold"
+                tools:ignore="SpUsage" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/show_seasons_rv"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_below="@+id/show_seasons_tv"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/show_images_rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/show_seasons_rl"
+            android:background="@android:color/white"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:id="@+id/show_images_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
+                android:text="Images:"
+                android:textColor="@android:color/black"
+                android:textSize="14dp"
+                android:textStyle="bold"
+                tools:ignore="SpUsage" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/show_images_rv"
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:layout_below="@+id/show_images_tv"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/show_videos_rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/show_images_rl"
+            android:background="@android:color/white"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:id="@+id/show_videos_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
+                android:text="Trailers and Videos:"
+                android:textColor="@android:color/black"
+                android:textSize="14dp"
+                android:textStyle="bold"
+                tools:ignore="SpUsage" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/show_videos_rv"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_below="@+id/show_videos_tv"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/show_cast_rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/show_videos_rl"
+            android:background="@android:color/white"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:id="@+id/show_cast_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
+                android:text="Cast:"
+                android:textColor="@android:color/black"
+                android:textSize="14dp"
+                android:textStyle="bold"
+                tools:ignore="SpUsage" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/show_cast_rv"
+                android:layout_width="match_parent"
+                android:layout_height="154dp"
+                android:layout_below="@+id/show_cast_tv"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/show_crew_rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/show_cast_rl"
+            android:background="@android:color/white"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:id="@+id/show_crew_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
+                android:text="Crew:"
+                android:textColor="@android:color/black"
+                android:textSize="14dp"
+                android:textStyle="bold"
+                tools:ignore="SpUsage" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/show_crew_rv"
+                android:layout_width="match_parent"
+                android:layout_height="154dp"
+                android:layout_below="@+id/show_crew_tv"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/show_reviews_rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/show_crew_rl"
+            android:background="@android:color/white"
+            android:paddingBottom="8dp"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:id="@+id/show_reviews_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Reviews:"
+                android:textColor="@android:color/black"
+                android:textSize="14dp"
+                android:textStyle="bold"
+                tools:ignore="SpUsage" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/show_reviews_rv"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_below="@+id/show_reviews_tv"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical" />
+        </RelativeLayout>
+    </RelativeLayout>
+</ScrollView>

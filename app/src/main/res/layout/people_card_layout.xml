@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="125dp"
+    android:layout_height="150dp"
+    android:background="#ffffff"
+    android:orientation="vertical"
+    android:paddingBottom="4dp"
+    android:paddingEnd="2dp"
+    android:paddingStart="2dp"
+    android:paddingTop="6dp">
+
+
+    <com.mikhaellopez.circularimageview.CircularImageView
+        android:id="@+id/profile_image"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/profile"
+        app:civ_border_color="@android:color/black"
+        app:civ_border_width="1dp"
+        app:civ_shadow_color="@android:color/black"
+        app:civ_shadow_radius="1.0" />
+
+    <TextView
+        android:id="@+id/roll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:text="demo"
+        android:textColor="@android:color/black"
+        android:textSize="10dp"
+        tools:ignore="SpUsage" />
+</LinearLayout>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/movies"
+            android:icon="@drawable/ic_movie_black_24dp"
+            android:title="@string/movies" />
+        <item
+            android:id="@+id/tv_shows"
+            android:icon="@drawable/ic_live_tv_black_24dp"
+            android:title="@string/tv_shows" />
+
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share App" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_star_black_24dp"
+                android:title="Rate and Review" />
+        </menu>
+    </item>
+
+</menu>

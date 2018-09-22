@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:shownIn="navigation_view">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/movies_in_theatres"
+            android:title="@string/now_playing" />
+        <item
+            android:id="@+id/movies_popular"
+            android:title="@string/popular" />
+        <item
+            android:id="@+id/movie_top_rated"
+            android:title="@string/top_rated" />
+        <item
+            android:id="@+id/action"
+            android:title="@string/action" />
+        <item
+            android:id="@+id/adventure"
+            android:title="@string/adventure" />
+        <item
+            android:id="@+id/animation"
+            android:title="@string/animation" />
+        <item
+            android:id="@+id/comedy"
+            android:title="@string/comedy" />
+        <item
+            android:id="@+id/crime"
+            android:title="@string/crime" />
+        <item
+            android:id="@+id/documentary"
+            android:title="@string/documentary" />
+        <item
+            android:id="@+id/drama"
+            android:title="@string/drama" />
+        <item
+            android:id="@+id/family"
+            android:title="@string/family" />
+        <item
+            android:id="@+id/fantasy"
+            android:title="@string/fantasy" />
+        <item
+            android:id="@+id/history"
+            android:title="@string/history" />
+        <item
+            android:id="@+id/horror"
+            android:title="@string/horror" />
+        <item
+            android:id="@+id/music"
+            android:title="@string/music" />
+        <item
+            android:id="@+id/mystery"
+            android:title="@string/mystery" />
+        <item
+            android:id="@+id/romance"
+            android:title="@string/romance" />
+        <item
+            android:id="@+id/sci_fi"
+            android:title="@string/sci_fi" />
+        <item
+            android:id="@+id/tv_movie"
+            android:title="@string/tv_movie" />
+        <item
+            android:id="@+id/thriller"
+            android:title="@string/thriller" />
+        <item
+            android:id="@+id/war"
+            android:title="@string/war" />
+        <item
+            android:id="@+id/western"
+            android:title="@string/western" />
+    </group>
+</menu>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:shownIn="navigation_view">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/shows_on_the_air"
+            android:title="@string/on_the_air" />
+        <item
+            android:id="@+id/shows_airing_today"
+            android:title="@string/airing_today" />
+        <item
+            android:id="@+id/shows_popular"
+            android:title="@string/popular" />
+        <item
+            android:id="@+id/show_top_rated"
+            android:title="@string/top_rated" />
+        <item
+            android:id="@+id/action"
+            android:title="@string/action_amp_adventure" />
+        <item
+            android:id="@+id/animation"
+            android:title="@string/animation" />
+        <item
+            android:id="@+id/comedy"
+            android:title="@string/comedy" />
+        <item
+            android:id="@+id/crime"
+            android:title="@string/crime" />
+        <item
+            android:id="@+id/documentary"
+            android:title="@string/documentary" />
+        <item
+            android:id="@+id/drama"
+            android:title="@string/drama" />
+        <item
+            android:id="@+id/family"
+            android:title="@string/family" />
+        <item
+            android:id="@+id/kids"
+            android:title="@string/kids" />
+        <item
+            android:id="@+id/mystery"
+            android:title="@string/mystery" />
+        <item
+            android:id="@+id/news"
+            android:title="@string/news" />
+        <item
+            android:id="@+id/reality"
+            android:title="@string/reality" />
+        <item
+            android:id="@+id/sci_fi"
+            android:title="@string/sci_fi_amp_fantasy" />
+        <item
+            android:id="@+id/soap"
+            android:title="@string/soap" />
+        <item
+            android:id="@+id/war"
+            android:title="@string/war_amp_politics" />
+        <item
+            android:id="@+id/western"
+            android:title="@string/western" />
+    </group>
+</menu>
