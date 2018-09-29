@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatDelegate;
@@ -19,6 +20,7 @@ import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.insomniacgks.newmoviesandshows.R;
+import com.insomniacgks.newmoviesandshows.activities.MainActivity;
 import com.insomniacgks.newmoviesandshows.activities.ShowDetailActivity;
 import com.insomniacgks.newmoviesandshows.models.ShowModel;
 
@@ -49,6 +51,10 @@ public class ShowsRecyclerViewAdapter extends RecyclerView.Adapter<ShowsRecycler
     @Override
     public void onBindViewHolder(@NonNull ShowsRecyclerViewAdapter.ViewHolder holder, int position) {
         ShowModel show = mShows.get(position);
+        if(MainActivity.isDarkMode){
+            holder.titleBackground.setImageResource(R.drawable.wave_3);
+            holder.title.setTextColor(Color.WHITE);
+        }
         if (show.getPoster_url() != null) {
             holder.title.setText(show.getName());
             holder.title.setSelected(true);
@@ -75,11 +81,12 @@ public class ShowsRecyclerViewAdapter extends RecyclerView.Adapter<ShowsRecycler
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        ImageView showPoster;
+        ImageView showPoster,titleBackground;
         TextView title;
 
         ViewHolder(View itemView) {
             super(itemView);
+            this.titleBackground = itemView.findViewById(R.id.title_background);
             this.title = itemView.findViewById(R.id.movie_name);
             this.showPoster = itemView.findViewById(R.id.poster);
             itemView.setOnClickListener(this);

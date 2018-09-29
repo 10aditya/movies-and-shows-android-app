@@ -4,7 +4,9 @@ package com.insomniacgks.newmoviesandshows.fragments;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
@@ -22,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
+import com.insomniacgks.newmoviesandshows.activities.MainActivity;
 import com.insomniacgks.newmoviesandshows.data.Constants;
 import com.insomniacgks.newmoviesandshows.data.FetchShows;
 import com.insomniacgks.newmoviesandshows.R;
@@ -95,6 +98,12 @@ public class ShowFragment extends Fragment
         blurView = view.findViewById(R.id.blur_view);
 
         shows = new ArrayList<>();
+
+        if(MainActivity.isDarkMode){
+            fab.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(66,66,66)));
+            fab.setImageTintList(ColorStateList.valueOf(Color.WHITE));
+            recyclerView.setBackgroundColor(Color.rgb(224,224,224));
+        }
 
         fetchShows = new FetchShows(currentURL + page_count);
         fetchShows.delegate = ShowFragment.this;

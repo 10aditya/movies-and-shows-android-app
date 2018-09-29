@@ -4,7 +4,9 @@ package com.insomniacgks.newmoviesandshows.fragments;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
@@ -24,6 +26,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
+import com.insomniacgks.newmoviesandshows.activities.MainActivity;
 import com.insomniacgks.newmoviesandshows.data.Constants;
 import com.insomniacgks.newmoviesandshows.data.FetchMovies;
 import com.insomniacgks.newmoviesandshows.R;
@@ -121,6 +124,11 @@ public class MovieFragment extends Fragment
         fetchMovies.delegate = MovieFragment.this;
         fetchMovies.execute();
 
+        if(MainActivity.isDarkMode){
+            fab.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(66,66,66)));
+            fab.setImageTintList(ColorStateList.valueOf(Color.WHITE));
+            recyclerView.setBackgroundColor(Color.rgb(224,224,224));
+        }
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
