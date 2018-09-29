@@ -4,8 +4,12 @@ import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -20,7 +24,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CompoundButton;
 import android.widget.SearchView;
+import android.widget.Switch;
 
 import com.insomniacgks.newmoviesandshows.R;
 import com.insomniacgks.newmoviesandshows.data.Constants;
@@ -33,15 +39,24 @@ public class MainActivity extends AppCompatActivity
 
     private Fragment currentFragment;
     private SearchView searchView;
+    private Switch darkMode;
+    private SharedPreferences sharedPreferences;
+    public static boolean isDarkMode = false;
+    private Toolbar toolbar;
+    private NavigationView navigationView;
+    private MenuItem searchMenuItem = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        isDarkMode = sharedPreferences.getBoolean("dark_mode", false);
+        /*if (isDarkMode) {
+            setTheme(R.style.AppThemeDark);
+        }*/
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        toolbar.setTitleTextColor(ContextCompat.getColor(this, android.R.color.black));
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -49,10 +64,28 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        toolbar.setNavigationIcon(R.drawable.ic_menu_black_24dp);
-        getWindow().setStatusBarColor(ContextCompat.getColor(this, android.R.color.holo_blue_dark));
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        MenuItem menuItem = navigationView.getMenu().findItem(R.id.switch_layout);
+        darkMode = menuItem.getActionView().findViewById(R.id.dark_mode);
+
+        darkMode.setChecked(isDarkMode);
+
+        darkMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor spe = sharedPreferences.edit();
+                spe.putBoolean("dark_mode", isChecked);
+                spe.apply();
+                isDarkMode = isChecked;
+                if (isChecked) {
+                    turnOnDarkMode();
+                } else {
+                    turnOffDarkMode();
+                }
+            }
+        });
 
         Constants.initializeGenres();
         Constants.initializeGenresR();
@@ -64,6 +97,61 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    void turnOnDarkMode() {
+        navigationView.setItemTextColor(ColorStateList.valueOf(Color.WHITE));
+        navigationView.setItemIconTintList(ColorStateList.valueOf(Color.WHITE));
+        navigationView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimaryDarkTheme));
+        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDarkDarkTheme));
+        toolbar.setTitleTextColor(ContextCompat.getColor(this, android.R.color.white));
+        toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimaryDarkTheme));
+        toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
+        if (currentFragment != null) {
+            currentFragment.onDestroy();
+            currentFragment = new MovieFragment();
+            replaceFragment();
+        }
+        if(searchMenuItem !=null) {
+            searchMenuItem.setIcon(R.drawable.ic_search_white_24dp);
+        }
+        navigationView.setCheckedItem(R.id.movies);
+    }
+
+    void turnOffDarkMode() {
+        navigationView.setItemTextColor(ColorStateList.valueOf(Color.rgb(66,66,66)));
+        navigationView.setItemIconTintList(ColorStateList.valueOf(Color.rgb(66,66,66)));
+        navigationView.setBackgroundColor(ContextCompat.getColor(this, android.R.color.white));
+        setTheme(R.style.AppTheme_NoActionBar);
+        toolbar.setBackgroundColor(ContextCompat.getColor(this, android.R.color.holo_blue_light));
+        toolbar.setNavigationIcon(R.drawable.ic_menu_black_24dp);
+        getWindow().setStatusBarColor(ContextCompat.getColor(this, android.R.color.holo_blue_dark));
+        toolbar.setTitleTextColor(ContextCompat.getColor(this, android.R.color.black));
+        if (currentFragment != null) {
+            currentFragment.onDestroy();
+            currentFragment = new MovieFragment();
+            replaceFragment();
+        }
+        navigationView.setCheckedItem(R.id.movies);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (isDarkMode) {
+            turnOnDarkMode();
+        } else {
+            turnOffDarkMode();
+        }
+        /*darkMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    Toast.makeText(MainActivity.this, "hehe", Toast.LENGTH_SHORT).show();
+                }
+            }
+        })*/
+
+    }
 
     @Override
     public void onBackPressed() {
@@ -81,7 +169,8 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        MenuItem searchMenuItem = menu.findItem(R.id.search);
+        searchMenuItem = menu.findItem(R.id.search);
+        if(isDarkMode){searchMenuItem.setIcon(R.drawable.ic_search_white_24dp);}
         searchView = (SearchView) searchMenuItem.getActionView();
         searchView.setQueryHint("Search Movies and TV Shows...");
         this.searchView.setMaxWidth(Integer.MAX_VALUE);
@@ -119,6 +208,10 @@ public class MainActivity extends AppCompatActivity
             case R.id.tv_shows: {
                 currentFragment = new ShowFragment();
                 replaceFragment();
+                break;
+            }
+            case R.id.switch_layout: {
+                darkMode.toggle();
                 break;
             }
             case R.id.nav_share: {
