@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/movie_reviews_rl"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:paddingStart="16dp"
+    android:paddingTop="8dp"
+    android:paddingEnd="16dp"
+    android:paddingBottom="8dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/movie_reviews_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Reviews:"
+        android:textColor="@android:color/black"
+        android:textSize="14dp"
+        android:textStyle="bold"
+        tools:ignore="SpUsage" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/movie_reviews_rv"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_below="@+id/movie_reviews_tv"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical" />
+</RelativeLayout>
