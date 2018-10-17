@@ -8,7 +8,7 @@ public class Constants {
     public static final String BASE_POSTER_PATH = "https://image.tmdb.org/t/p/w342";
     static final String BASE_BACKDROP_PATH = "https://image.tmdb.org/t/p/w780";
     static final String BASE_PROFILE_IMAGE_PATH = "https://image.tmdb.org/t/p/w154";
-    public static final String API_KEY = "<TMDB API KEY>";
+    public static final String API_KEY = "78649d641d4f004c03de3691a37fdfa2";
     public static final String YOUTUBE_VIDEO_URL = "http://www.youtube.com/watch?v=%1$s";
     static final String YOUTUBE_THUMBNAIL_URL = "http://img.youtube.com/vi/%1$s/0.jpg";
     private static final HashMap<String, Integer> GENRES = new HashMap<>();

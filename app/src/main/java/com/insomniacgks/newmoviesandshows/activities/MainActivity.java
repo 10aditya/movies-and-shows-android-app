@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity
     private Toolbar toolbar;
     private NavigationView navigationView;
     private MenuItem searchMenuItem = null;
-
+    private Fragment movieFragment, tvFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -57,6 +57,9 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        currentFragment = movieFragment = new MovieFragment();
+        tvFragment = new ShowFragment();
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -89,12 +92,14 @@ public class MainActivity extends AppCompatActivity
 
         Constants.initializeGenres();
         Constants.initializeGenresR();
-        currentFragment = new MovieFragment();
 
-        replaceFragment();
+        if (isDarkMode) {
+            turnOnDarkMode();
+        } else {
+            turnOffDarkMode();
+        }
 
         navigationView.getMenu().getItem(0).setChecked(true);
-
     }
 
     void turnOnDarkMode() {
@@ -105,9 +110,17 @@ public class MainActivity extends AppCompatActivity
         toolbar.setTitleTextColor(ContextCompat.getColor(this, android.R.color.white));
         toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimaryDarkTheme));
         toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
-        if (currentFragment != null) {
+        if (currentFragment == movieFragment && currentFragment != null) {
             currentFragment.onDestroy();
-            currentFragment = new MovieFragment();
+            currentFragment = movieFragment = new MovieFragment();
+            tvFragment = new ShowFragment();
+            navigationView.setCheckedItem(R.id.movies);
+            replaceFragment();
+        } else if (currentFragment == tvFragment && currentFragment != null) {
+            currentFragment.onDestroy();
+            movieFragment = new MovieFragment();
+            currentFragment = tvFragment = new ShowFragment();
+            navigationView.setCheckedItem(R.id.tv_shows);
             replaceFragment();
         }
         if(searchMenuItem !=null) {
@@ -125,10 +138,21 @@ public class MainActivity extends AppCompatActivity
         toolbar.setNavigationIcon(R.drawable.ic_menu_black_24dp);
         getWindow().setStatusBarColor(ContextCompat.getColor(this, android.R.color.holo_blue_dark));
         toolbar.setTitleTextColor(ContextCompat.getColor(this, android.R.color.black));
-        if (currentFragment != null) {
+        if (currentFragment == movieFragment && currentFragment != null) {
             currentFragment.onDestroy();
-            currentFragment = new MovieFragment();
+            currentFragment = movieFragment = new MovieFragment();
+            tvFragment = new ShowFragment();
+            navigationView.setCheckedItem(R.id.movies);
             replaceFragment();
+        } else if (currentFragment == tvFragment && currentFragment != null) {
+            currentFragment.onDestroy();
+            movieFragment = new MovieFragment();
+            currentFragment = tvFragment = new ShowFragment();
+            navigationView.setCheckedItem(R.id.tv_shows);
+            replaceFragment();
+        }
+        if (searchMenuItem != null) {
+            searchMenuItem.setIcon(R.drawable.ic_search_black_24dp);
         }
         navigationView.setCheckedItem(R.id.movies);
     }
@@ -137,11 +161,6 @@ public class MainActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
 
-        if (isDarkMode) {
-            turnOnDarkMode();
-        } else {
-            turnOffDarkMode();
-        }
         /*darkMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -201,12 +220,12 @@ public class MainActivity extends AppCompatActivity
 
         switch (id) {
             case R.id.movies: {
-                currentFragment = new MovieFragment();
+                currentFragment = movieFragment;
                 replaceFragment();
                 break;
             }
             case R.id.tv_shows: {
-                currentFragment = new ShowFragment();
+                currentFragment = tvFragment;
                 replaceFragment();
                 break;
             }

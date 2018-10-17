@@ -2,12 +2,15 @@ package com.insomniacgks.newmoviesandshows.data;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +19,12 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.insomniacgks.newmoviesandshows.R;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
@@ -113,7 +120,7 @@ public class GetCast extends AsyncTask<String, Void, ArrayList<String[]>> {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
             holder.roll.setText(String.format("%s\nas\n%s",
                     this.casts.get(position)[1], this.casts.get(position)[0]));
 
@@ -127,8 +134,20 @@ public class GetCast extends AsyncTask<String, Void, ArrayList<String[]>> {
                         .apply(options)
                         .apply(new RequestOptions()
                                 .diskCacheStrategy(DiskCacheStrategy.ALL))
-
                         .apply(new RequestOptions().placeholder(ContextCompat.getDrawable(context, R.drawable.profile)))
+                        .listener(new RequestListener<Bitmap>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                                Log.i("profile image download:","complete");
+                                holder.ProfileImageView.setImageBitmap(resource);
+                                return false;
+                            }
+                        })
                         .transition(withCrossFade())
                         .into(holder.ProfileImageView);
             }

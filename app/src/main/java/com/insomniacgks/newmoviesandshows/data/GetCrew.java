@@ -1,8 +1,10 @@
 package com.insomniacgks.newmoviesandshows.data;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,8 +17,12 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.insomniacgks.newmoviesandshows.R;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
@@ -109,7 +115,7 @@ public class GetCrew extends AsyncTask<String, Void, ArrayList<String[]>> {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
             holder.roll.setText(String.format("%s\n%s",
                     this.Crews.get(position)[1], this.Crews.get(position)[0]));
 
@@ -124,7 +130,18 @@ public class GetCrew extends AsyncTask<String, Void, ArrayList<String[]>> {
                         .apply(new RequestOptions()
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .apply(new RequestOptions().placeholder(ContextCompat.getDrawable(context, R.drawable.profile))))
-                        .transition(withCrossFade())
+                        .listener(new RequestListener<Bitmap>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                                holder.ProfileImageView.setImageBitmap(resource);
+                                return false;
+                            }
+                        }).transition(withCrossFade())
                         .into(holder.ProfileImageView);
             }
         }
