@@ -2,13 +2,16 @@ package com.insomniacgks.newmoviesandshows.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
@@ -43,7 +46,9 @@ public class ImagesRecyclerViewAdapter extends RecyclerView.Adapter<ImagesRecycl
         RequestOptions options = new RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .priority(Priority.HIGH);
-
+        if (PreferenceManager.getDefaultSharedPreferences(this.context).getBoolean("dark_mode", false)) {
+            holder.layoutBack.setBackgroundColor(ContextCompat.getColor(this.context, R.color.black_theme_color));
+        }
         Glide.with(context)
                 .asBitmap()
                 .load(images.get(position))
@@ -63,9 +68,10 @@ public class ImagesRecyclerViewAdapter extends RecyclerView.Adapter<ImagesRecycl
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView backdrop;
-
+        LinearLayout layoutBack;
         ViewHolder(View itemView) {
             super(itemView);
+            layoutBack = itemView.findViewById(R.id.layout_back);
             backdrop = itemView.findViewById(R.id.image_backdrop);
             backdrop.setOnClickListener(this);
         }

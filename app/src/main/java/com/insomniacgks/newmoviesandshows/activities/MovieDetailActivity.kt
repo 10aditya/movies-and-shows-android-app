@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.graphics.Palette
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -49,7 +50,7 @@ class MovieDetailActivity : AppCompatActivity() {
         movie = Objects.requireNonNull(intent.extras).getSerializable("movie") as MovieModel
         initializeViews()
 
-        val sharedPreference = PreferenceManager.getDefaultSharedPreferences(this);
+        val sharedPreference = PreferenceManager.getDefaultSharedPreferences(this)
         val isDarkModeOn = sharedPreference.getBoolean("dark_mode", false)
 
         if(isDarkModeOn){
@@ -149,6 +150,11 @@ class MovieDetailActivity : AppCompatActivity() {
     }
 
     private fun turnOnDarkMode(){
+        findViewById<FrameLayout>(R.id.movie_images_fl).setBackgroundColor(ContextCompat.getColor(this,R.color.black_theme_color))
+        findViewById<FrameLayout>(R.id.movie_videos_fl).setBackgroundColor(ContextCompat.getColor(this,R.color.black_theme_color))
+        findViewById<FrameLayout>(R.id.movie_cast_fl).setBackgroundColor(ContextCompat.getColor(this,R.color.black_theme_color))
+        findViewById<FrameLayout>(R.id.movie_crew_fl).setBackgroundColor(ContextCompat.getColor(this,R.color.black_theme_color))
+        findViewById<FrameLayout>(R.id.movie_reviews_fl).setBackgroundColor(ContextCompat.getColor(this,R.color.black_theme_color))
         findViewById<ImageView>(R.id.wave_layout).setImageDrawable(getDrawable(R.drawable.wave_3))
         findViewById<View>(R.id.just_a_view).setBackgroundColor(ContextCompat.getColor(this,R.color.black_theme_color))
         findViewById<ImageView>(R.id.rating_view).setImageDrawable(getDrawable(R.drawable.ic_star_white_24dp))

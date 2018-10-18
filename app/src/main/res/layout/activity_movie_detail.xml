@@ -86,7 +86,6 @@
                         android:id="@+id/movie_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="TextView"
                         android:textColor="@android:color/black"
                         android:textSize="14dp"
                         tools:ignore="SpUsage" />
@@ -101,7 +100,6 @@
                             android:id="@+id/movie_release_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="TextView"
                             android:textColor="@android:color/black"
                             android:textSize="14dp"
                             tools:ignore="SpUsage" />
@@ -122,7 +120,6 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="1dp"
                             android:gravity="top"
-                            android:text="9.2"
                             android:textColor="@android:color/black"
                             android:textSize="14dp"
                             tools:ignore="SpUsage" />
@@ -143,7 +140,7 @@
                 android:id="@+id/show_overview_rl"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/movie_details_layout"
+                android:layout_below="@id/movie_details_layout"
                 android:background="@android:color/white"
                 android:paddingStart="16dp"
                 android:paddingTop="8dp"
@@ -164,7 +161,7 @@
                     android:id="@+id/show_overview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/show_overview_tv"
+                    android:layout_below="@id/show_overview_tv"
                     android:layout_marginTop="8dp"
                     android:textColor="@android:color/black"
                     android:textSize="14dp"
@@ -176,7 +173,7 @@
                 android:id="@+id/movie_images_fl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/show_overview_rl"
+                android:layout_below="@id/show_overview_rl"
                 android:background="@android:color/white"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp" />
@@ -214,7 +211,7 @@
                 android:id="@+id/movie_videos_fl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/movie_images_fl"
+                android:layout_below="@id/movie_images_fl"
                 android:background="@android:color/white"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp" />
@@ -254,7 +251,7 @@
                 android:id="@+id/movie_cast_fl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/movie_videos_fl"
+                android:layout_below="@id/movie_videos_fl"
                 android:background="@android:color/white"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp" />
@@ -294,7 +291,7 @@
                 android:id="@+id/movie_crew_fl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/movie_cast_fl"
+                android:layout_below="@id/movie_cast_fl"
                 android:background="@android:color/white"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp" />
@@ -334,11 +331,9 @@
                 android:id="@+id/movie_reviews_fl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/movie_crew_fl"
+                android:layout_below="@id/movie_crew_fl"
                 android:background="@android:color/white"
-                android:paddingStart="16dp"
                 android:paddingTop="8dp"
-                android:paddingEnd="16dp"
                 android:paddingBottom="8dp" />
             <!--
                         <RelativeLayout

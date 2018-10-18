@@ -1,18 +1,24 @@
 package com.insomniacgks.newmoviesandshows.fragments;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.insomniacgks.newmoviesandshows.R;
 import com.insomniacgks.newmoviesandshows.activities.MovieDetailActivity;
 import com.insomniacgks.newmoviesandshows.data.GetImages;
+
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,6 +36,10 @@ public class ImageFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_image, container, false);
+        if (PreferenceManager.getDefaultSharedPreferences(this.getContext()).getBoolean("dark_mode", false)) {
+            v.findViewById(R.id.movie_images_rl).setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(this.getContext()), R.color.black_theme_color));
+            ((TextView) v.findViewById(R.id.show_images_tv)).setTextColor(Color.WHITE);
+        }
         RecyclerView images_rv = v.findViewById(R.id.movie_images_rv);
         new GetImages(getContext(), MovieDetailActivity.Companion.getMovie().getId(), images_rv, "movie", (RelativeLayout) v.findViewById(R.id.movie_images_rl)).execute();
         return v;

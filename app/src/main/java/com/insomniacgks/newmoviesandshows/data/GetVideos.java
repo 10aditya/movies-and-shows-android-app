@@ -1,11 +1,14 @@
 package com.insomniacgks.newmoviesandshows.data;
 
+import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
@@ -33,10 +37,13 @@ import java.util.ArrayList;
 import static com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions.withCrossFade;
 
 public class GetVideos extends AsyncTask<String, Void, ArrayList<String>> {
+    @SuppressLint("StaticFieldLeak")
     private Context context;
     private int id;
+    @SuppressLint("StaticFieldLeak")
     private RecyclerView recyclerView;
     private String type;
+    @SuppressLint("StaticFieldLeak")
     private RelativeLayout rl;
 
 
@@ -119,6 +126,9 @@ public class GetVideos extends AsyncTask<String, Void, ArrayList<String>> {
                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                     .priority(Priority.HIGH);
 
+            if(PreferenceManager.getDefaultSharedPreferences(this.context).getBoolean("dark_mode", false)){
+                holder.layoutBack.setBackgroundColor(ContextCompat.getColor(this.context, R.color.black_theme_color));
+            }
             Glide.with(context)
                     .asBitmap()
                     .load(String.format(Constants.YOUTUBE_THUMBNAIL_URL, videoss.get(position)))
@@ -140,9 +150,11 @@ public class GetVideos extends AsyncTask<String, Void, ArrayList<String>> {
         class ViewHolder extends android.support.v7.widget.RecyclerView.ViewHolder implements View.OnClickListener {
 
             ImageView video_thumbnail;
+            RelativeLayout layoutBack;
 
             ViewHolder(View itemView) {
                 super(itemView);
+                layoutBack = itemView.findViewById(R.id.layout_back);
                 this.video_thumbnail = itemView.findViewById(R.id.trailer_thumbnail);
                 itemView.setOnClickListener(this);
             }
