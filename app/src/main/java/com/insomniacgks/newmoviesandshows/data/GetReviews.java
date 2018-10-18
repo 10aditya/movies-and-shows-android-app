@@ -1,14 +1,18 @@
 package com.insomniacgks.newmoviesandshows.data;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -82,10 +86,12 @@ public class GetReviews extends AsyncTask<String, Void, ArrayList<String[]>> {
     class ReviewsRecyclerViewAdapter extends RecyclerView.Adapter<ReviewsRecyclerViewAdapter.ViewHolder> {
         private ArrayList<String[]> reviewss;
         private Context context;
+        private boolean isDarkModeOn;
 
         ReviewsRecyclerViewAdapter(Context context, ArrayList<String[]> Reviewss) {
             this.context = context;
             this.reviewss = Reviewss;
+            this.isDarkModeOn = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("dark_mode", false);
         }
 
 
@@ -99,6 +105,11 @@ public class GetReviews extends AsyncTask<String, Void, ArrayList<String[]>> {
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            if(isDarkModeOn){
+                holder.author.setTextColor(Color.WHITE);
+                holder.content.setTextColor(Color.WHITE);
+                holder.LayoutBack.setBackgroundColor(ContextCompat.getColor(this.context, R.color.black_theme_color));
+            }
             holder.author.setText(String.format("Review By %s:", this.reviewss.get(position)[0]));
             holder.content.setText(this.reviewss.get(position)[1]);
         }
@@ -111,9 +122,10 @@ public class GetReviews extends AsyncTask<String, Void, ArrayList<String[]>> {
         class ViewHolder extends android.support.v7.widget.RecyclerView.ViewHolder {
 
             TextView content, author;
-
+            LinearLayout LayoutBack;
             ViewHolder(View itemView) {
                 super(itemView);
+                this.LayoutBack = itemView.findViewById(R.id.layout_back);
                 this.author = itemView.findViewById(R.id.review_author);
                 this.content = itemView.findViewById(R.id.review_content);
             }

@@ -3,7 +3,9 @@ package com.insomniacgks.newmoviesandshows.data;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -14,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -36,6 +39,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import static com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions.withCrossFade;
 
@@ -104,10 +108,12 @@ public class GetCast extends AsyncTask<String, Void, ArrayList<String[]>> {
     class CastsRecyclerViewAdapter extends RecyclerView.Adapter<CastsRecyclerViewAdapter.ViewHolder> {
         private ArrayList<String[]> casts;
         private Context context;
+        private boolean isDarkModeOn;
 
         CastsRecyclerViewAdapter(Context context, ArrayList<String[]> casts) {
             this.context = context;
             this.casts = casts;
+            this.isDarkModeOn = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("dark_mode", false);
         }
 
 
@@ -121,6 +127,10 @@ public class GetCast extends AsyncTask<String, Void, ArrayList<String[]>> {
 
         @Override
         public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+            if(isDarkModeOn){
+                holder.LayoutBack.setBackgroundColor(ContextCompat.getColor(context, R.color.black_theme_color));
+                holder.roll.setTextColor(Color.WHITE);
+            }
             holder.roll.setText(String.format("%s\nas\n%s",
                     this.casts.get(position)[1], this.casts.get(position)[0]));
 
@@ -160,11 +170,12 @@ public class GetCast extends AsyncTask<String, Void, ArrayList<String[]>> {
 
         class ViewHolder extends android.support.v7.widget.RecyclerView.ViewHolder {
             CircularImageView ProfileImageView;
-
+            LinearLayout LayoutBack;
             TextView roll;
 
             ViewHolder(View itemView) {
                 super(itemView);
+                this.LayoutBack = itemView.findViewById(R.id.layout_back);
                 this.ProfileImageView = itemView.findViewById(R.id.profile_image);
                 this.roll = itemView.findViewById(R.id.roll);
             }

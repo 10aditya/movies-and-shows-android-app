@@ -2,7 +2,6 @@
 <RelativeLayout android:id="@+id/movie_crew_rl"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
     android:background="@android:color/white"
     android:paddingTop="8dp"
     android:paddingBottom="8dp"

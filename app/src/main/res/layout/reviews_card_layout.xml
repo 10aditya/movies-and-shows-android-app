@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:paddingBottom="8dp"
     android:paddingTop="8dp"
+    android:id="@+id/layout_back"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 

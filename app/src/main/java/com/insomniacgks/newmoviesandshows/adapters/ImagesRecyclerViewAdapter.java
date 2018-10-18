@@ -1,6 +1,7 @@
 package com.insomniacgks.newmoviesandshows.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +15,7 @@ import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.insomniacgks.newmoviesandshows.R;
+import com.insomniacgks.newmoviesandshows.activities.ImageViewerActivity;
 
 import java.util.ArrayList;
 
@@ -59,12 +61,19 @@ public class ImagesRecyclerViewAdapter extends RecyclerView.Adapter<ImagesRecycl
         return images.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView backdrop;
 
         ViewHolder(View itemView) {
             super(itemView);
             backdrop = itemView.findViewById(R.id.image_backdrop);
+            backdrop.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            context.startActivity(new Intent(context, ImageViewerActivity.class));
+            
         }
     }
 }

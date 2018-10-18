@@ -33,8 +33,14 @@
         <activity
             android:name=".activities.ShowSeasonDetailActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activities.SearchResultActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activities.SearchResultActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.ImageViewerActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_image_viewer"
+            android:theme="@style/FullscreenTheme"></activity>
     </application>
 
 </manifest>

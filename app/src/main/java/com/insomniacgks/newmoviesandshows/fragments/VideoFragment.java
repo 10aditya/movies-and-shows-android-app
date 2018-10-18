@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.insomniacgks.newmoviesandshows.R;
+import com.insomniacgks.newmoviesandshows.activities.MovieDetailActivity;
 import com.insomniacgks.newmoviesandshows.data.GetVideos;
 
 import static com.insomniacgks.newmoviesandshows.activities.MovieDetailActivity.movie;
@@ -31,7 +32,7 @@ public class VideoFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_video, container, false);
         RecyclerView videos_rv = v.findViewById(R.id.movie_videos_rv);
-        new GetVideos(getContext(), movie.getId(), videos_rv, "movie", (RelativeLayout) v.findViewById(R.id.movie_videos_rl)).execute();
+        new GetVideos(getContext(), MovieDetailActivity.Companion.getMovie().getId(), videos_rv, "movie", (RelativeLayout) v.findViewById(R.id.movie_videos_rl)).execute();
         return v;
     }
 

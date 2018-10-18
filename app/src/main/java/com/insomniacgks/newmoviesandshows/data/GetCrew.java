@@ -2,7 +2,9 @@ package com.insomniacgks.newmoviesandshows.data;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -12,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -97,12 +100,14 @@ public class GetCrew extends AsyncTask<String, Void, ArrayList<String[]>> {
 
 
     class CrewsRecyclerViewAdapter extends RecyclerView.Adapter<CrewsRecyclerViewAdapter.ViewHolder> {
+        private boolean isDarkModeOn;
         private ArrayList<String[]> Crews;
         private Context context;
 
         CrewsRecyclerViewAdapter(Context context, ArrayList<String[]> Crews) {
             this.context = context;
             this.Crews = Crews;
+            this.isDarkModeOn = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("dark_mode", false);
         }
 
 
@@ -116,6 +121,11 @@ public class GetCrew extends AsyncTask<String, Void, ArrayList<String[]>> {
 
         @Override
         public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+            if(isDarkModeOn){
+                holder.LayoutBack.setBackgroundColor(ContextCompat.getColor(context, R.color.black_theme_color));
+                holder.roll.setTextColor(Color.WHITE);
+            }
+
             holder.roll.setText(String.format("%s\n%s",
                     this.Crews.get(position)[1], this.Crews.get(position)[0]));
 
@@ -153,11 +163,12 @@ public class GetCrew extends AsyncTask<String, Void, ArrayList<String[]>> {
 
         class ViewHolder extends android.support.v7.widget.RecyclerView.ViewHolder {
             CircularImageView ProfileImageView;
-
+            LinearLayout LayoutBack;
             TextView roll;
 
             ViewHolder(View itemView) {
                 super(itemView);
+                this.LayoutBack = itemView.findViewById(R.id.layout_back);
                 this.ProfileImageView = itemView.findViewById(R.id.profile_image);
                 this.roll = itemView.findViewById(R.id.roll);
             }

@@ -31,7 +31,7 @@ public class ImageFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_image, container, false);
         RecyclerView images_rv = v.findViewById(R.id.movie_images_rv);
-        new GetImages(getContext(), MovieDetailActivity.movie.getId(), images_rv, "movie", (RelativeLayout) v.findViewById(R.id.movie_images_rl)).execute();
+        new GetImages(getContext(), MovieDetailActivity.Companion.getMovie().getId(), images_rv, "movie", (RelativeLayout) v.findViewById(R.id.movie_images_rl)).execute();
         return v;
     }
 
