@@ -35,7 +35,7 @@ class ReviewFragment : Fragment() {
             v.findViewById<RelativeLayout>(R.id.movie_reviews_rl).setBackgroundColor(ContextCompat.getColor(this.context!!, R.color.black_theme_color))
             v.findViewById<TextView>(R.id.movie_reviews_tv).setTextColor(Color.WHITE)
         }
-        GetReviews(context, MovieDetailActivity.movie.id, v.findViewById<View>(R.id.movie_reviews_rv) as RecyclerView, v.findViewById<View>(R.id.movie_reviews_rl) as RelativeLayout, "movie").execute()
+        GetReviews(context!!, MovieDetailActivity.movie.id, v.findViewById<View>(R.id.movie_reviews_rv) as RecyclerView, v.findViewById<View>(R.id.movie_reviews_rl) as RelativeLayout, "movie").execute()
         return v
     }
 

@@ -72,9 +72,9 @@ class ShowsRecyclerViewAdapter(shows: ArrayList<ShowModel>, private val context:
     }
 
     inner class ViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-        internal var showPoster: ImageView = itemView.findViewById(R.id.movie_name)
+        internal var showPoster: ImageView = itemView.findViewById(R.id.poster)
         internal var titleBackground: ImageView = itemView.findViewById(R.id.title_background)
-        internal var title: TextView = itemView.findViewById(R.id.poster)
+        internal var title: TextView = itemView.findViewById(R.id.movie_name)
 
         init {
             itemView.setOnClickListener(this)

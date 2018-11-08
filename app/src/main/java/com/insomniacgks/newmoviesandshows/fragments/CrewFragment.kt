@@ -33,7 +33,7 @@ class CrewFragment : Fragment() {
             v.findViewById<View>(R.id.movie_crew_rl).setBackgroundColor(ContextCompat.getColor(this.context!!, R.color.black_theme_color))
         }
 
-        GetCrew(context, MovieDetailActivity.movie.id, v.findViewById<View>(R.id.movie_crew_rv) as RecyclerView, "movie", v.findViewById<View>(R.id.movie_crew_rl) as RelativeLayout).execute()
+        GetCrew(this.context!!, MovieDetailActivity.movie.id, v.findViewById<View>(R.id.movie_crew_rv) as RecyclerView, "movie", v.findViewById<View>(R.id.movie_crew_rl) as RelativeLayout).execute()
         return v
     }
 

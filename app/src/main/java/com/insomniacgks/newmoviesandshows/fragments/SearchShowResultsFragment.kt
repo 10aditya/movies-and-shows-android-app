@@ -8,18 +8,12 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-
 import com.insomniacgks.newmoviesandshows.R
-import com.insomniacgks.newmoviesandshows.adapters.MoviesRecyclerViewAdapter
 import com.insomniacgks.newmoviesandshows.adapters.ShowsRecyclerViewAdapter
 import com.insomniacgks.newmoviesandshows.data.Constants
-import com.insomniacgks.newmoviesandshows.data.FetchMovies
 import com.insomniacgks.newmoviesandshows.data.FetchShows
-import com.insomniacgks.newmoviesandshows.models.MovieModel
 import com.insomniacgks.newmoviesandshows.models.ShowModel
-
-import java.util.ArrayList
+import java.util.*
 
 /**
  * A simple [Fragment] subclass.
@@ -28,15 +22,15 @@ class SearchShowResultsFragment : Fragment(), FetchShows.AsyncResponse {
 
 
     private var searchQuery: String? = null
-    internal var recyclerView: RecyclerView
+    private lateinit var recyclerView: RecyclerView
     private var shows: ArrayList<ShowModel>? = null
     private var firstPageFlag: Boolean = false
     private var total_pages = 9999
     private var myAdapter: ShowsRecyclerViewAdapter? = null
     private var fetchShows: FetchShows? = null
-    internal var url: String
-    internal var page_count = 1
-    private var view: View? = null
+    private lateinit var url: String
+    private var page_count = 1
+    internal var view: View? = null
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -68,13 +62,15 @@ class SearchShowResultsFragment : Fragment(), FetchShows.AsyncResponse {
         return view
     }
 
-    override fun processFinish(output: ArrayList<ShowModel>?, total_pages: Int) {
+    override fun processFinish(output: ArrayList<ShowModel>, total_pages: Int) {
         shows = output
+/*
         if (output == null) {
             view!!.findViewById<View>(R.id.hehe).visibility = View.VISIBLE
             recyclerView.visibility = View.GONE
             return
         }
+*/
 
         if (output.size == 0) {
             view!!.findViewById<View>(R.id.hehe).visibility = View.VISIBLE
@@ -83,16 +79,15 @@ class SearchShowResultsFragment : Fragment(), FetchShows.AsyncResponse {
         }
 
         if (firstPageFlag) {
-            val columns: Int
-            columns = 3
+            val columns = 3
             this.total_pages = total_pages
             val layoutManager = GridLayoutManager(context, columns)
-            myAdapter = ShowsRecyclerViewAdapter(shows, context)
+            myAdapter = ShowsRecyclerViewAdapter(shows!!, context!!)
             this.recyclerView.layoutManager = layoutManager
             this.recyclerView.adapter = myAdapter
             firstPageFlag = false
         } else {
-            myAdapter!!.addMoreItems(shows)
+            myAdapter!!.addMoreItems(shows!!)
             myAdapter!!.notifyDataSetChanged()
         }
 

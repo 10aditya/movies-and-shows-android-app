@@ -4,8 +4,8 @@ package com.insomniacgks.newmoviesandshows.fragments
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.content.res.ColorStateList
-import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.CoordinatorLayout
@@ -22,34 +22,31 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.RelativeLayout
-
+import com.insomniacgks.newmoviesandshows.R
 import com.insomniacgks.newmoviesandshows.activities.MainActivity
+import com.insomniacgks.newmoviesandshows.adapters.ShowsRecyclerViewAdapter
 import com.insomniacgks.newmoviesandshows.data.Constants
 import com.insomniacgks.newmoviesandshows.data.FetchShows
-import com.insomniacgks.newmoviesandshows.R
-import com.insomniacgks.newmoviesandshows.adapters.ShowsRecyclerViewAdapter
 import com.insomniacgks.newmoviesandshows.models.ShowModel
-
-import java.util.ArrayList
-import java.util.Objects
+import java.util.*
 
 /**
  * A simple [Fragment] subclass.
  */
 class ShowFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener, FetchShows.AsyncResponse {
 
-    internal var layout: RelativeLayout
-    internal var fab: FloatingActionButton
-    internal var tpview: NavigationView
+    private lateinit var layout: RelativeLayout
+    private lateinit var fab: FloatingActionButton
+    private lateinit var tpview: NavigationView
     private var recyclerView: RecyclerView? = null
     internal var firstPageFlag = true
-    internal var currentURL: String
-    internal var blurView: FrameLayout
-    internal var coordinatorLayout: CoordinatorLayout
-    internal var shows: ArrayList<ShowModel>
-    internal var fetchShows: FetchShows
+    private lateinit var currentURL: String
+    private lateinit var blurView: FrameLayout
+    private lateinit var coordinatorLayout: CoordinatorLayout
+    private lateinit var shows: ArrayList<ShowModel>
+    private lateinit var fetchShows: FetchShows
     private var myAdapter: ShowsRecyclerViewAdapter? = null
-    internal var page_count = 1
+    private var page_count = 1
     private var total_pages = 999999
 
 
@@ -91,7 +88,7 @@ class ShowFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
 
         shows = ArrayList()
 
-        if (MainActivity.getIsDarkMode()) {
+        if (MainActivity.isDarkMode) {
             fab.backgroundTintList = ColorStateList.valueOf(Color.rgb(66, 66, 66))
             fab.imageTintList = ColorStateList.valueOf(Color.WHITE)
             recyclerView!!.setBackgroundColor(Color.rgb(224, 224, 224))
@@ -102,8 +99,8 @@ class ShowFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
         fetchShows.execute()
 
         blurView.setOnClickListener {
-            val animation = ObjectAnimator.ofFloat(layout, "translationX", -tpview.width)
-            animation.setDuration(125)
+            val animation = ObjectAnimator.ofFloat(layout, "translationX", (-tpview.width).toFloat())
+            animation.duration = 125
             animation.addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
                     super.onAnimationEnd(animation)
@@ -118,8 +115,8 @@ class ShowFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
         fab.setOnClickListener {
             if (tpview.visibility == View.INVISIBLE) {
                 tpview.visibility = View.VISIBLE
-                val animation = ObjectAnimator.ofFloat(layout, "translationX", 0)
-                animation.setDuration(125)
+                val animation = ObjectAnimator.ofFloat(layout, "translationX", 0.0f)
+                animation.duration = 125
                 animation.start()
                 animation.addListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
@@ -129,8 +126,8 @@ class ShowFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
                 })
                 blurView.visibility = View.VISIBLE
             } else {
-                val animation = ObjectAnimator.ofFloat(layout, "translationX", -tpview.width)
-                animation.setDuration(125)
+                val animation = ObjectAnimator.ofFloat(layout, "translationX", (-tpview.width).toFloat())
+                animation.duration = 125
                 animation.addListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
                         super.onAnimationEnd(animation)
@@ -208,8 +205,8 @@ class ShowFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
             }
         }
 
-        val animation = ObjectAnimator.ofFloat(layout, "translationX", -tpview.width)
-        animation.setDuration(125)
+        val animation = ObjectAnimator.ofFloat(layout, "translationX", (-tpview.width).toFloat())
+        animation.duration = 125
         animation.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator) {
                 super.onAnimationEnd(animation)
@@ -227,12 +224,10 @@ class ShowFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
     override fun processFinish(output: ArrayList<ShowModel>, total_pages: Int) {
         shows = output
         if (firstPageFlag) {
-            val columns: Int
-
-            columns = 3
+            val columns = 3
             this.total_pages = total_pages
             val layoutManager = GridLayoutManager(context, columns)
-            myAdapter = ShowsRecyclerViewAdapter(shows, context)
+            myAdapter = ShowsRecyclerViewAdapter(shows, context!!)
             this.recyclerView!!.layoutManager = layoutManager
             this.recyclerView!!.adapter = myAdapter
             firstPageFlag = false
@@ -243,8 +238,8 @@ class ShowFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
     }
 
     fun changeFabPosition() {
-        val animation = ObjectAnimator.ofFloat(layout, "translationX", -tpview.width)
-        animation.setDuration(300)
+        val animation = ObjectAnimator.ofFloat(layout, "translationX", (-tpview.width).toFloat())
+        animation.duration = 300
         animation.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator) {
                 super.onAnimationEnd(animation)

@@ -1,5 +1,6 @@
 package com.insomniacgks.newmoviesandshows.data
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.os.AsyncTask
@@ -14,19 +15,15 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
-
 import com.insomniacgks.newmoviesandshows.R
-
-import org.json.JSONArray
 import org.json.JSONObject
-
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
-import java.util.ArrayList
+import java.util.*
 
-class GetReviews(private val context: Context, private val id: Int, private val recyclerView: RecyclerView, private val rl: RelativeLayout, private val type: String) : AsyncTask<String, Void, ArrayList<Array<String>>>() {
+class GetReviews(@field:SuppressLint("StaticFieldLeak") private val context: Context, private val id: Int, @field:SuppressLint("StaticFieldLeak") private val recyclerView: RecyclerView, @field:SuppressLint("StaticFieldLeak") private val rl: RelativeLayout, private val type: String) : AsyncTask<String, Void, ArrayList<Array<String>>>() {
 
     override fun doInBackground(vararg strings: String): ArrayList<Array<String>>? {
         var reviews: ArrayList<Array<String>>? = null
@@ -68,12 +65,7 @@ class GetReviews(private val context: Context, private val id: Int, private val 
 
 
     internal inner class ReviewsRecyclerViewAdapter(private val context: Context, private val reviewss: ArrayList<Array<String>>) : RecyclerView.Adapter<ReviewsRecyclerViewAdapter.ViewHolder>() {
-        private val isDarkModeOn: Boolean
-
-        init {
-            this.isDarkModeOn = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("dark_mode", false)
-        }
-
+        private val isDarkModeOn: Boolean = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("dark_mode", false)
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)

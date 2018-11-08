@@ -1,6 +1,7 @@
 package com.insomniacgks.newmoviesandshows.fragments
 
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -12,12 +13,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
-
 import com.insomniacgks.newmoviesandshows.R
 import com.insomniacgks.newmoviesandshows.activities.MovieDetailActivity
 import com.insomniacgks.newmoviesandshows.data.GetImages
-
-import java.util.Objects
+import java.util.*
 
 
 /**
@@ -35,7 +34,7 @@ class ImageFragment : Fragment() {
             (v.findViewById<View>(R.id.show_images_tv) as TextView).setTextColor(Color.WHITE)
         }
         val images_rv = v.findViewById<RecyclerView>(R.id.movie_images_rv)
-        GetImages(context, MovieDetailActivity.movie.id, images_rv, "movie", v.findViewById<View>(R.id.movie_images_rl) as RelativeLayout).execute()
+        GetImages(context!!, MovieDetailActivity.movie.id, images_rv, "movie", v.findViewById<View>(R.id.movie_images_rl) as RelativeLayout).execute()
         return v
     }
 

@@ -1,5 +1,6 @@
 package com.insomniacgks.newmoviesandshows.data
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -15,30 +16,25 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
-
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions.withCrossFade
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.insomniacgks.newmoviesandshows.R
 import com.mikhaellopez.circularimageview.CircularImageView
-
-import org.json.JSONArray
 import org.json.JSONObject
-
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
-import java.util.ArrayList
+import java.util.*
 
-import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions.withCrossFade
-
-class GetCrew(private val context: Context, private val id: Int, private val recyclerView: RecyclerView, private val type: String, private val rl: RelativeLayout) : AsyncTask<String, Void, ArrayList<Array<String>>>() {
+class GetCrew(@SuppressLint("StaticFieldLeak") private val context: Context, private val id: Int, @SuppressLint("StaticFieldLeak") private val recyclerView: RecyclerView, private val type: String, @SuppressLint("StaticFieldLeak") private val rl: RelativeLayout) : AsyncTask<String, Void, ArrayList<Array<String>>>() {
 
     override fun doInBackground(vararg strings: String): ArrayList<Array<String>> {
         val Crews = ArrayList<Array<String>>()
@@ -83,11 +79,7 @@ class GetCrew(private val context: Context, private val id: Int, private val rec
 
 
     internal inner class CrewsRecyclerViewAdapter(private val context: Context, private val Crews: ArrayList<Array<String>>) : RecyclerView.Adapter<CrewsRecyclerViewAdapter.ViewHolder>() {
-        private val isDarkModeOn: Boolean
-
-        init {
-            this.isDarkModeOn = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("dark_mode", false)
-        }
+        private val isDarkModeOn: Boolean = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("dark_mode", false)
 
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -107,7 +99,7 @@ class GetCrew(private val context: Context, private val id: Int, private val rec
             val options = RequestOptions()
                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                     .priority(Priority.HIGH)
-            if (this.Crews[position][2] != "null" && this.Crews[position][2] != null) {
+            if (this.Crews[position][2] != "null" && this.Crews[position][2] != "") {
                 Glide.with(context)
                         .asBitmap()
                         .load(Constants.BASE_PROFILE_IMAGE_PATH + this.Crews[position][2])
