@@ -102,7 +102,7 @@ class MovieDetailActivity : AppCompatActivity() {
 
                     override fun onResourceReady(resource: Bitmap, model: Any, target: Target<Bitmap>, dataSource: DataSource, isFirstResource: Boolean): Boolean {
                         Palette.from(resource).generate { palette ->
-                            val swatch = palette.vibrantSwatch
+                            val swatch = palette!!.vibrantSwatch
                             if (swatch != null) {
                                 window.statusBarColor = swatch.rgb
                             }
