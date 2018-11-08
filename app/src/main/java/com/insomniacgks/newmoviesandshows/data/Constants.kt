@@ -7,7 +7,7 @@ object Constants {
     val BASE_POSTER_PATH = "https://image.tmdb.org/t/p/w342"
     internal val BASE_BACKDROP_PATH = "https://image.tmdb.org/t/p/w780"
     internal val BASE_PROFILE_IMAGE_PATH = "https://image.tmdb.org/t/p/w154"
-    val API_KEY = "78649d641d4f004c03de3691a37fdfa2"
+    val API_KEY = "<TMDB API KEY>"
     val YOUTUBE_VIDEO_URL = "http://www.youtube.com/watch?v=%1\$s"
     internal val YOUTUBE_THUMBNAIL_URL = "http://img.youtube.com/vi/%1\$s/0.jpg"
     private val GENRES = HashMap<String, Int>()
