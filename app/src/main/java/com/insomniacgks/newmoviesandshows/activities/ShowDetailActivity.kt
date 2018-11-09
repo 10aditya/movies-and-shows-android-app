@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.os.AsyncTask
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.support.constraint.ConstraintLayout
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.graphics.Palette
@@ -69,7 +70,7 @@ class ShowDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_show_detail)
         show = intent.extras!!.getSerializable("show") as ShowModel
         initializeViews()
-        turnOnDarkMode()
+        if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("dark_mode", false)) turnOnDarkMode()
         FetchShowDetails().execute()
         name.text = show.name
         rating.text = show.rating
@@ -142,11 +143,22 @@ class ShowDetailActivity : AppCompatActivity() {
     }
 
     private fun turnOnDarkMode() {
-        findViewById<View>(R.id.show_overview_rl).setBackgroundColor(Color.BLACK)
-        (findViewById<View>(R.id.show_overview_tv) as TextView).setTextColor(Color.WHITE)
+        findViewById<View>(R.id.show_overview_rl).setBackgroundColor(ContextCompat.getColor(this, R.color.black_theme_color))
+        findViewById<View>(R.id.show_seasons_rl).setBackgroundColor(ContextCompat.getColor(this, R.color.black_theme_color))
+        findViewById<View>(R.id.show_images_rl).setBackgroundColor(ContextCompat.getColor(this, R.color.black_theme_color))
+        findViewById<View>(R.id.show_videos_rl).setBackgroundColor(ContextCompat.getColor(this, R.color.black_theme_color))
+        findViewById<View>(R.id.show_cast_rl).setBackgroundColor(ContextCompat.getColor(this, R.color.black_theme_color))
+        findViewById<View>(R.id.show_reviews_rl).setBackgroundColor(ContextCompat.getColor(this, R.color.black_theme_color))
+        findViewById<View>(R.id.show_crew_rl).setBackgroundColor(ContextCompat.getColor(this, R.color.black_theme_color))
+        findViewById<TextView>(R.id.show_reviews_tv).setTextColor(Color.WHITE)
+        findViewById<TextView>(R.id.show_crew_tv).setTextColor(Color.WHITE)
+        findViewById<TextView>(R.id.show_overview_tv).setTextColor(Color.WHITE)
+        findViewById<TextView>(R.id.show_seasons_tv).setTextColor(Color.WHITE)
+        findViewById<TextView>(R.id.show_images_tv).setTextColor(Color.WHITE)
+        findViewById<TextView>(R.id.show_videos_tv).setTextColor(Color.WHITE)
+        findViewById<TextView>(R.id.show_cast_tv).setTextColor(Color.WHITE)
+        findViewById<TextView>(R.id.show_images_tv).setTextColor(Color.WHITE)
         showOverview!!.setTextColor(Color.WHITE)
-        findViewById<View>(R.id.show_seasons_rl).setBackgroundColor(Color.BLACK)
-        (findViewById<View>(R.id.show_seasons_tv) as TextView).setTextColor(Color.WHITE)
     }
 
 
@@ -236,14 +248,12 @@ class ShowDetailActivity : AppCompatActivity() {
     private inner class SeasonsRecyclerViewAdapter(private val context: Context, var seasons: ArrayList<Array<String>>) : RecyclerView.Adapter<SeasonsRecyclerViewAdapter.ViewHolder>() {
 
         private inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-            var season_air_date: TextView
-            var season_number: TextView
-            var season_poster: ImageView
+            var season_air_date: TextView = itemView.findViewById(R.id.season_air_date)
+            var season_number: TextView = itemView.findViewById(R.id.season_number)
+            var season_poster: ImageView = itemView.findViewById(R.id.season_poster)
+            var season_card_back:ConstraintLayout = itemView.findViewById(R.id.season_card_back)
 
             init {
-                this.season_air_date = itemView.findViewById(R.id.season_air_date)
-                this.season_number = itemView.findViewById(R.id.season_number)
-                this.season_poster = itemView.findViewById(R.id.season_poster)
                 itemView.setOnClickListener(this)
             }
 
@@ -270,7 +280,9 @@ class ShowDetailActivity : AppCompatActivity() {
             val options = RequestOptions()
                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                     .priority(Priority.HIGH)
-
+            if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("dark_mode", false)) {
+                holder.season_card_back.setBackgroundColor(ContextCompat.getColor(context, R.color.black_theme_color))
+            }
             Glide.with(context)
                     .asBitmap()
                     .load(Constants.BASE_POSTER_PATH + seasons[position][2])

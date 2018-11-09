@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         darkMode!!.isChecked = isDarkMode
 
-        darkMode!!.setOnCheckedChangeListener { buttonView, isChecked ->
+        darkMode!!.setOnCheckedChangeListener { _, isChecked ->
             val spe = sharedPreferences!!.edit()
             spe.putBoolean("dark_mode", isChecked)
             spe.apply()

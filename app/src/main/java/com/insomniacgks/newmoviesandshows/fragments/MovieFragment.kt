@@ -48,26 +48,32 @@ class MovieFragment : Fragment(), NavigationView.OnNavigationItemSelectedListene
     private var myAdapter: MoviesRecyclerViewAdapter? = null
     private var page_count = 1
     private var total_pages = 999999
-
-
+    private var savedFragmentState: Bundle? = null
+    lateinit var v: View
+    val STAV = "saved_state"
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_movie, container, false)
+        v = inflater.inflate(R.layout.fragment_movie, container, false)
+        if (savedFragmentState == null && savedInstanceState != null) {
+            savedFragmentState = savedInstanceState.getBundle(STAV)
+        }
+        if(savedFragmentState!=null){
 
-        fab = view.findViewById(R.id.FAB)
-        tpview = view.findViewById(R.id.timepassview)
+        }
+        fab = v.findViewById(R.id.FAB)
+        tpview = v.findViewById(R.id.timepassview)
 
         tpview.setNavigationItemSelectedListener(this)
         tpview.menu.getItem(0).isChecked = true
 
-        layout = view.findViewById(R.id.timepass)
-        recyclerView = view.findViewById(R.id.movies_recycler_view)
+        layout = v.findViewById(R.id.timepass)
+        recyclerView = v.findViewById(R.id.movies_recycler_view)
 
-        blurView = view.findViewById(R.id.blur_view)
+        blurView = v.findViewById(R.id.blur_view)
         currentURL = "https://api.themoviedb.org/3/movie/now_playing?api_key=" + Constants.API_KEY + "&language=en-US&page="
 
-        coordinatorLayout = view.findViewById(R.id.coordinator_layout)
+        coordinatorLayout = v.findViewById(R.id.coordinator_layout)
         val snackbar = Snackbar.make(coordinatorLayout, "Loading Movies...", Snackbar.LENGTH_SHORT)
         snackbar.show()
         recyclerView!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -141,7 +147,7 @@ class MovieFragment : Fragment(), NavigationView.OnNavigationItemSelectedListene
                 passwordField.startAnimation(fadeAnimation);*/
         }
 
-        return view
+        return v
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -224,8 +230,7 @@ class MovieFragment : Fragment(), NavigationView.OnNavigationItemSelectedListene
     override fun processFinish(output: ArrayList<MovieModel>, total_pages: Int) {
         movies = output
         if (firstPageFlag) {
-            val columns: Int
-            columns = 3
+            val columns = 3
             this.total_pages = total_pages
             val layoutManager = GridLayoutManager(context, columns)
             myAdapter = MoviesRecyclerViewAdapter(movies, context!!)

@@ -26,7 +26,6 @@ import com.insomniacgks.newmoviesandshows.R
 import com.insomniacgks.newmoviesandshows.data.Constants
 import com.insomniacgks.newmoviesandshows.fragments.*
 import com.insomniacgks.newmoviesandshows.models.MovieModel
-import java.util.*
 
 class MovieDetailActivity : AppCompatActivity() {
 
@@ -47,7 +46,7 @@ class MovieDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_detail)
-        movie = Objects.requireNonNull(intent.extras).getSerializable("movie") as MovieModel
+        movie = intent!!.extras!!.getSerializable("movie") as MovieModel
         initializeViews()
 
         val sharedPreference = PreferenceManager.getDefaultSharedPreferences(this)

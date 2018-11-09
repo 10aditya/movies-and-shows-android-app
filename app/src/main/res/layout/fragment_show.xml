@@ -56,9 +56,9 @@
             android:layout_toEndOf="@+id/timepassview"
             android:elevation="16dp"
             android:scaleType="center"
-            android:src="@drawable/ic_chevron_left_black_24dp"
+            app:srcCompat="@drawable/ic_chevron_left_black_24dp"
             app:backgroundTint="@android:color/holo_blue_light"
-            app:fabSize="normal" />
+            app:fabSize="mini" />
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

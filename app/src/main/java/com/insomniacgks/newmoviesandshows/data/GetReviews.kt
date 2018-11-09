@@ -23,7 +23,13 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
 
-class GetReviews(@field:SuppressLint("StaticFieldLeak") private val context: Context, private val id: Int, @field:SuppressLint("StaticFieldLeak") private val recyclerView: RecyclerView, @field:SuppressLint("StaticFieldLeak") private val rl: RelativeLayout, private val type: String) : AsyncTask<String, Void, ArrayList<Array<String>>>() {
+class GetReviews(
+        @field:SuppressLint("StaticFieldLeak") private val context: Context,
+        private val id: Int,
+        @field:SuppressLint("StaticFieldLeak") private val recyclerView: RecyclerView,
+        @field:SuppressLint("StaticFieldLeak") private val rl: RelativeLayout,
+        private val type: String
+) : AsyncTask<String, Void, ArrayList<Array<String>>>() {
 
     override fun doInBackground(vararg strings: String): ArrayList<Array<String>>? {
         var reviews: ArrayList<Array<String>>? = null
@@ -86,8 +92,9 @@ class GetReviews(@field:SuppressLint("StaticFieldLeak") private val context: Con
             return reviewss.size
         }
 
-        internal inner class ViewHolder(itemView: View) : android.support.v7.widget.RecyclerView.ViewHolder(itemView) {
 
+
+        internal inner class ViewHolder(itemView: View) : android.support.v7.widget.RecyclerView.ViewHolder(itemView) {
             var content: TextView
             var author: TextView
             var LayoutBack: LinearLayout
