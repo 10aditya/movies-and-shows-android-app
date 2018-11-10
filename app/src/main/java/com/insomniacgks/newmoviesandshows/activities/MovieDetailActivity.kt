@@ -4,10 +4,13 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.support.design.widget.FloatingActionButton
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.graphics.Palette
 import android.support.v7.widget.RecyclerView
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -29,6 +32,7 @@ import com.insomniacgks.newmoviesandshows.models.MovieModel
 
 class MovieDetailActivity : AppCompatActivity() {
 
+    private var ratingButton: FloatingActionButton? = null
     private var movieTitle: TextView? = null
     private var movieRatings: TextView? = null
     private var movieOverview: TextView? = null
@@ -122,6 +126,10 @@ class MovieDetailActivity : AppCompatActivity() {
         fragmentTransaction.replace(R.id.movie_reviews_fl, ReviewFragment())
         fragmentTransaction.commitAllowingStateLoss()
 
+        ratingButton!!.bringToFront()
+        ratingButton!!.setOnClickListener(View.OnClickListener {
+            createRatingDialog()
+        })
         /*
         new GetImages(this, movie.getId(), images_rv, "movie", (RelativeLayout) findViewById(R.id.movie_images_rl)).execute();
         new GetCast(this, movie.getId(), cast_rv, "movie", (RelativeLayout) findViewById(R.id.movie_cast_rl)).execute();
@@ -131,7 +139,16 @@ class MovieDetailActivity : AppCompatActivity() {
 */
     }
 
+    private fun createRatingDialog() {
+        val alertDialog: AlertDialog.Builder = AlertDialog.Builder(this)
+        val view: View = LayoutInflater.from(this).inflate(R.layout.rating_dialog_layout, null, false)
+        alertDialog.setView(view)
+        alertDialog.create()
+        alertDialog.show()
+    }
+
     private fun initializeViews() {
+        ratingButton = findViewById(R.id.rating_button)
         movieTitle = findViewById(R.id.movie_title)
         movieReleaseDate = findViewById(R.id.movie_release_date)
         movieRatings = findViewById(R.id.movie_ratings)

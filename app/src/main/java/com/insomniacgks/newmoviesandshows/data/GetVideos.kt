@@ -108,7 +108,7 @@ class GetVideos(@field:SuppressLint("StaticFieldLeak")
                     .apply(RequestOptions()
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .apply(RequestOptions()
-                                    .placeholder(this.context.resources.getDrawable(R.drawable.gradient))))
+                                    .placeholder(ContextCompat.getDrawable(context, R.drawable.gradient))))
                     .transition(withCrossFade())
                     .into(holder.video_thumbnail)
 

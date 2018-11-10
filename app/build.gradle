@@ -34,6 +34,7 @@ dependencies {
     implementation 'com.mikhaellopez:circularimageview:3.0.2'
     //noinspection GradleDependency
     implementation 'com.eightbitlab:blurview:1.1.2'
+    implementation 'com.xw.repo:bubbleseekbar:3.19'
 
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
 
