@@ -1,4 +1,4 @@
-package com.insomniacgks.newmoviesandshows.data
+package com.insomniacgks.newmoviesandshows.backend
 
 import android.os.AsyncTask
 import com.insomniacgks.newmoviesandshows.models.MovieModel

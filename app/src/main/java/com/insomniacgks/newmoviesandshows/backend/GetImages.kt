@@ -1,4 +1,4 @@
-package com.insomniacgks.newmoviesandshows.data
+package com.insomniacgks.newmoviesandshows.backend
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -14,8 +14,8 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
-
-class GetImages(@SuppressLint("StaticFieldLeak") private val context: Context, private val id: Int, @SuppressLint("StaticFieldLeak") private val recyclerview: RecyclerView, private val type: String, @SuppressLint("StaticFieldLeak") private val rl: RelativeLayout) : AsyncTask<Void, Void, ArrayList<String>>() {
+@SuppressLint("StaticFieldLeak")
+class GetImages(private val context: Context, private val id: Int, private val recyclerview: RecyclerView, private val type: String, @SuppressLint("StaticFieldLeak") private val rl: RelativeLayout) : AsyncTask<Void, Void, ArrayList<String>>() {
 
     override fun doInBackground(vararg voids: Void): ArrayList<String>? {
         var images: ArrayList<String>? = null

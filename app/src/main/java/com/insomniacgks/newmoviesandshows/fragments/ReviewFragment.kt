@@ -17,7 +17,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import com.insomniacgks.newmoviesandshows.R
 import com.insomniacgks.newmoviesandshows.activities.MovieDetailActivity
-import com.insomniacgks.newmoviesandshows.data.GetReviews
+import com.insomniacgks.newmoviesandshows.backend.GetReviews
 
 
 /**

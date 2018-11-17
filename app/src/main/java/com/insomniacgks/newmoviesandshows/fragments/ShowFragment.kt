@@ -25,8 +25,8 @@ import android.widget.RelativeLayout
 import com.insomniacgks.newmoviesandshows.R
 import com.insomniacgks.newmoviesandshows.activities.MainActivity
 import com.insomniacgks.newmoviesandshows.adapters.ShowsRecyclerViewAdapter
-import com.insomniacgks.newmoviesandshows.data.Constants
-import com.insomniacgks.newmoviesandshows.data.FetchShows
+import com.insomniacgks.newmoviesandshows.backend.Constants
+import com.insomniacgks.newmoviesandshows.backend.FetchShows
 import com.insomniacgks.newmoviesandshows.models.ShowModel
 import java.util.*
 

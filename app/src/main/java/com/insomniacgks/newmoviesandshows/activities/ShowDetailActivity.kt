@@ -31,7 +31,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.insomniacgks.newmoviesandshows.R
-import com.insomniacgks.newmoviesandshows.data.*
+import com.insomniacgks.newmoviesandshows.backend.*
 import com.insomniacgks.newmoviesandshows.models.ShowModel
 import eightbitlab.com.blurview.BlurView
 import org.json.JSONException

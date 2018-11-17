@@ -10,8 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.insomniacgks.newmoviesandshows.R
 import com.insomniacgks.newmoviesandshows.adapters.MoviesRecyclerViewAdapter
-import com.insomniacgks.newmoviesandshows.data.Constants
-import com.insomniacgks.newmoviesandshows.data.FetchMovies
+import com.insomniacgks.newmoviesandshows.backend.Constants
+import com.insomniacgks.newmoviesandshows.backend.FetchMovies
 import com.insomniacgks.newmoviesandshows.models.MovieModel
 import java.util.*
 

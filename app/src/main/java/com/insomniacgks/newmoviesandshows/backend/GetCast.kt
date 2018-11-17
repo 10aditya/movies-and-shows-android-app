@@ -1,4 +1,4 @@
-package com.insomniacgks.newmoviesandshows.data
+package com.insomniacgks.newmoviesandshows.backend
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -10,6 +10,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatDelegate
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,10 +35,13 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
 
-class GetCrew(@SuppressLint("StaticFieldLeak") private val context: Context, private val id: Int, @SuppressLint("StaticFieldLeak") private val recyclerView: RecyclerView, private val type: String, @SuppressLint("StaticFieldLeak") private val rl: RelativeLayout) : AsyncTask<String, Void, ArrayList<Array<String>>>() {
+class GetCast(@field:SuppressLint("StaticFieldLeak")
+              private val context: Context, private val id: Int, @field:SuppressLint("StaticFieldLeak")
+              private val recyclerView: RecyclerView, private val type: String, @field:SuppressLint("StaticFieldLeak")
+              private val relativeLayout: RelativeLayout) : AsyncTask<String, Void, ArrayList<Array<String>>>() {
 
     override fun doInBackground(vararg strings: String): ArrayList<Array<String>> {
-        val Crews = ArrayList<Array<String>>()
+        val casts = ArrayList<Array<String>>()
         try {
             val client = URL("http://api.themoviedb.org/3/" + type + "/" + id + "/credits?api_key=" + Constants.API_KEY + "&language=en-US").openConnection() as HttpURLConnection
             client.requestMethod = "GET"
@@ -48,17 +52,17 @@ class GetCrew(@SuppressLint("StaticFieldLeak") private val context: Context, pri
                 val line = reader.readLine() ?: break
                 builder.append(line)
             }
-            val resultArray = JSONObject(builder.toString()).getJSONArray("crew")
+            val resultArray = JSONObject(builder.toString()).getJSONArray("cast")
             var i = 0
-            while (i < 8 && i < resultArray.length()) {
+            while (i < 10 && i < resultArray.length()) {
                 val `object` = resultArray.getJSONObject(i)
-                Crews.add(arrayOf(`object`.getString("job"), `object`.getString("name"), `object`.getString("profile_path")))
+                casts.add(arrayOf(`object`.getString("character"), `object`.getString("name"), `object`.getString("profile_path")))
                 i++
             }
         } catch (ignored: Exception) {
         }
 
-        return Crews
+        return casts
     }
 
     override fun onPostExecute(strings: ArrayList<Array<String>>?) {
@@ -66,19 +70,19 @@ class GetCrew(@SuppressLint("StaticFieldLeak") private val context: Context, pri
         if (strings != null) {
             if (strings.size != 0) {
                 val layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
-                val myAdapter = CrewsRecyclerViewAdapter(this.context, strings)
+                val myAdapter = CastsRecyclerViewAdapter(this.context, strings)
                 recyclerView.layoutManager = layoutManager
                 recyclerView.adapter = myAdapter
             } else {
-                rl.visibility = View.GONE
+                relativeLayout.visibility = View.GONE
             }
         } else {
-            rl.visibility = View.GONE
+            relativeLayout.visibility = View.GONE
         }
     }
 
 
-    internal inner class CrewsRecyclerViewAdapter(private val context: Context, private val Crews: ArrayList<Array<String>>) : RecyclerView.Adapter<CrewsRecyclerViewAdapter.ViewHolder>() {
+    internal inner class CastsRecyclerViewAdapter(private val context: Context, private val casts: ArrayList<Array<String>>) : RecyclerView.Adapter<CastsRecyclerViewAdapter.ViewHolder>() {
         private val isDarkModeOn: Boolean = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("dark_mode", false)
 
 
@@ -92,37 +96,38 @@ class GetCrew(@SuppressLint("StaticFieldLeak") private val context: Context, pri
                 holder.LayoutBack.setBackgroundColor(ContextCompat.getColor(context, R.color.black_theme_color))
                 holder.roll.setTextColor(Color.WHITE)
             }
-
-            holder.roll.text = String.format("%s\n%s",
-                    this.Crews[position][1], this.Crews[position][0])
+            holder.roll.text = String.format("%s\nas\n%s",
+                    this.casts[position][1], this.casts[position][0])
 
             val options = RequestOptions()
                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                     .priority(Priority.HIGH)
-            if (this.Crews[position][2] != "null" && this.Crews[position][2] != "") {
+            if (this.casts[position][2] != "null" && this.casts[position][2] != "") {
                 Glide.with(context)
                         .asBitmap()
-                        .load(Constants.BASE_PROFILE_IMAGE_PATH + this.Crews[position][2])
+                        .load(Constants.BASE_PROFILE_IMAGE_PATH + this.casts[position][2])
                         .apply(options)
                         .apply(RequestOptions()
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .apply(RequestOptions().placeholder(ContextCompat.getDrawable(context, R.drawable.profile))))
+                                .diskCacheStrategy(DiskCacheStrategy.ALL))
+                        .apply(RequestOptions().placeholder(ContextCompat.getDrawable(context, R.drawable.profile)))
                         .listener(object : RequestListener<Bitmap> {
                             override fun onLoadFailed(e: GlideException?, model: Any, target: Target<Bitmap>, isFirstResource: Boolean): Boolean {
                                 return false
                             }
 
                             override fun onResourceReady(resource: Bitmap, model: Any, target: Target<Bitmap>, dataSource: DataSource, isFirstResource: Boolean): Boolean {
+                                Log.i("profile image download:", "complete")
                                 holder.ProfileImageView.setImageBitmap(resource)
                                 return false
                             }
-                        }).transition(withCrossFade())
+                        })
+                        .transition(withCrossFade())
                         .into(holder.ProfileImageView)
             }
         }
 
         override fun getItemCount(): Int {
-            return Crews.size
+            return casts.size
         }
 
         internal inner class ViewHolder(itemView: View) : android.support.v7.widget.RecyclerView.ViewHolder(itemView) {

@@ -24,7 +24,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.insomniacgks.newmoviesandshows.R
 import com.insomniacgks.newmoviesandshows.adapters.ShowSeasonViewPageAdapter
-import com.insomniacgks.newmoviesandshows.data.Constants
+import com.insomniacgks.newmoviesandshows.backend.Constants
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader

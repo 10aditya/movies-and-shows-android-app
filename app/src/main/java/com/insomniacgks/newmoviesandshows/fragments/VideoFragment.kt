@@ -16,7 +16,7 @@ import android.widget.TextView
 
 import com.insomniacgks.newmoviesandshows.R
 import com.insomniacgks.newmoviesandshows.activities.MovieDetailActivity
-import com.insomniacgks.newmoviesandshows.data.GetVideos
+import com.insomniacgks.newmoviesandshows.backend.GetVideos
 
 import java.util.Objects
 

@@ -10,8 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.insomniacgks.newmoviesandshows.R
 import com.insomniacgks.newmoviesandshows.adapters.ShowsRecyclerViewAdapter
-import com.insomniacgks.newmoviesandshows.data.Constants
-import com.insomniacgks.newmoviesandshows.data.FetchShows
+import com.insomniacgks.newmoviesandshows.backend.Constants
+import com.insomniacgks.newmoviesandshows.backend.FetchShows
 import com.insomniacgks.newmoviesandshows.models.ShowModel
 import java.util.*
 

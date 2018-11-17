@@ -15,7 +15,7 @@ import android.widget.TextView
 
 import com.insomniacgks.newmoviesandshows.R
 import com.insomniacgks.newmoviesandshows.activities.MovieDetailActivity
-import com.insomniacgks.newmoviesandshows.data.GetCrew
+import com.insomniacgks.newmoviesandshows.backend.GetCrew
 
 
 /**

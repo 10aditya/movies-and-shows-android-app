@@ -15,7 +15,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions.withCrossFade
 import com.bumptech.glide.request.RequestOptions
 import com.insomniacgks.newmoviesandshows.R
-import com.insomniacgks.newmoviesandshows.data.Constants
+import com.insomniacgks.newmoviesandshows.backend.Constants
 import java.util.*
 
 class EpisodeFragment : Fragment() {

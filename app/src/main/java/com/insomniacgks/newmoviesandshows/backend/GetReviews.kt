@@ -1,4 +1,4 @@
-package com.insomniacgks.newmoviesandshows.data
+package com.insomniacgks.newmoviesandshows.backend
 
 import android.annotation.SuppressLint
 import android.content.Context

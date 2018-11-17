@@ -24,7 +24,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.SearchView
 import android.widget.Switch
 import com.insomniacgks.newmoviesandshows.R
-import com.insomniacgks.newmoviesandshows.data.Constants
+import com.insomniacgks.newmoviesandshows.backend.Constants
 import com.insomniacgks.newmoviesandshows.fragments.MovieFragment
 import com.insomniacgks.newmoviesandshows.fragments.ShowFragment
 

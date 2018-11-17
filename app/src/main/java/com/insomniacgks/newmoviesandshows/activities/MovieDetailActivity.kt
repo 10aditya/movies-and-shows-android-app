@@ -1,7 +1,9 @@
 package com.insomniacgks.newmoviesandshows.activities
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.os.AsyncTask
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.design.widget.FloatingActionButton
@@ -12,10 +14,7 @@ import android.support.v7.graphics.Palette
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.DataSource
@@ -26,9 +25,15 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.insomniacgks.newmoviesandshows.R
-import com.insomniacgks.newmoviesandshows.data.Constants
+import com.insomniacgks.newmoviesandshows.backend.Constants
 import com.insomniacgks.newmoviesandshows.fragments.*
 import com.insomniacgks.newmoviesandshows.models.MovieModel
+import com.xw.repo.BubbleSeekBar
+import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.net.URL
+import javax.net.ssl.HttpsURLConnection
 
 class MovieDetailActivity : AppCompatActivity() {
 
@@ -40,6 +45,7 @@ class MovieDetailActivity : AppCompatActivity() {
     private var movieGenres: TextView? = null
     private var moviePoster: ImageView? = null
     private var movieBackdrop: ImageView? = null
+    private var ratingBar: BubbleSeekBar? = null
     private val images_rv: RecyclerView? = null
     private val cast_rv: RecyclerView? = null
     private val crew_rv: RecyclerView? = null
@@ -127,9 +133,10 @@ class MovieDetailActivity : AppCompatActivity() {
         fragmentTransaction.commitAllowingStateLoss()
 
         ratingButton!!.bringToFront()
-        ratingButton!!.setOnClickListener(View.OnClickListener {
+        ratingButton!!.setOnClickListener {
             createRatingDialog()
-        })
+        }
+
         /*
         new GetImages(this, movie.getId(), images_rv, "movie", (RelativeLayout) findViewById(R.id.movie_images_rl)).execute();
         new GetCast(this, movie.getId(), cast_rv, "movie", (RelativeLayout) findViewById(R.id.movie_cast_rl)).execute();
@@ -139,12 +146,59 @@ class MovieDetailActivity : AppCompatActivity() {
 */
     }
 
+    @SuppressLint("InflateParams")
     private fun createRatingDialog() {
         val alertDialog: AlertDialog.Builder = AlertDialog.Builder(this)
         val view: View = LayoutInflater.from(this).inflate(R.layout.rating_dialog_layout, null, false)
+        ratingBar = view.findViewById(R.id.rating_bar)
+        val rateTV = view.findViewById<TextView>(R.id.rate_tv)
+        rateTV.text = String.format("Rate %s", movie.title)
         alertDialog.setView(view)
-        alertDialog.create()
-        alertDialog.show()
+        alertDialog.setPositiveButton("Rate") { _, _ ->
+            createGuestSession()
+        }
+
+        alertDialog.setNegativeButton("Cancel") { _, _ ->
+
+        }
+        val dialog = alertDialog.create()
+        dialog.show()
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
+        ratingBar!!.onProgressChangedListener = object : BubbleSeekBar.OnProgressChangedListener {
+            override fun onProgressChanged(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float, fromUser: Boolean) {
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
+                val color: Int = when {
+                    progressFloat <= 2.8f -> ContextCompat.getColor(this@MovieDetailActivity, android.R.color.holo_red_dark)
+                    progressFloat <= 4.6f -> ContextCompat.getColor(this@MovieDetailActivity, android.R.color.holo_red_light)
+                    progressFloat <= 6.4f -> ContextCompat.getColor(this@MovieDetailActivity, R.color.neutral)
+                    progressFloat <= 8.2f -> ContextCompat.getColor(this@MovieDetailActivity, android.R.color.holo_green_light)
+                    else -> ContextCompat.getColor(this@MovieDetailActivity, android.R.color.holo_green_dark)
+                }
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).text = String.format("Rate %.1f/10", progressFloat)
+                ratingBar!!.setSecondTrackColor(color)
+                ratingBar!!.setBubbleColor(color)
+                ratingBar!!.setThumbColor(color)
+
+            }
+
+            override fun getProgressOnActionUp(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float) {
+
+            }
+
+            override fun getProgressOnFinally(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float, fromUser: Boolean) {
+
+            }
+        }
+
+
+    }
+
+    private fun createGuestSession() {
+        val guestSessionId: String = GuestSession().execute().get()
+        if (guestSessionId.equals("-1")) {
+            Toast.makeText(this@MovieDetailActivity, "Failed to connect! Try Again.", Toast.LENGTH_LONG).show()
+            return
+        }
     }
 
     private fun initializeViews() {
@@ -156,8 +210,8 @@ class MovieDetailActivity : AppCompatActivity() {
         moviePoster = findViewById(R.id.movie_poster)
         movieBackdrop = findViewById(R.id.movie_backdrop)
         movieOverview = findViewById(R.id.show_overview)
-        /*
-        images_rv = findViewById(R.id.movie_images_rv);
+
+        /*images_rv = findViewById(R.id.movie_images_rv);
         cast_rv = findViewById(R.id.movie_cast_rv);
         crew_rv = findViewById(R.id.movie_crew_rv);
         reviews_rv = findViewById(R.id.movie_reviews_rv);
@@ -186,6 +240,31 @@ class MovieDetailActivity : AppCompatActivity() {
 
     companion object {
         lateinit var movie: MovieModel
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    internal inner class GuestSession : AsyncTask<Void, Void, String>() {
+        override fun doInBackground(vararg params: Void?): String {
+            val link = URL("https://api.themoviedb.org/3/authentication/guest_session/new?api_key=${Constants.API_KEY}")
+            val client = link.openConnection() as HttpsURLConnection
+            client.requestMethod = "GET"
+            client.connect()
+            val reader = BufferedReader(InputStreamReader(client.inputStream))
+            val stringBuilder = StringBuilder()
+            while (true) {
+                stringBuilder.append(reader.readLine() ?: break)
+            }
+            val jsonString = stringBuilder.toString()
+            val jsonObject = JSONObject(jsonString)
+            if (!jsonObject.getBoolean("success")) {
+                return "-1"
+            }
+            return jsonObject.getString("guest_session_id")
+        }
+
+        override fun onPostExecute(result: String) {
+            super.onPostExecute(result)
+        }
     }
 
 }

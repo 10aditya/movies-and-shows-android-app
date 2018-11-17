@@ -8,4 +8,5 @@
     <color name="transparent">#00000000</color>
     <color name="black_theme_color">#FF343434</color>
     <color name="black_overlay">#66000000</color>
+    <color name="neutral">#FFEB3B</color>
 </resources>

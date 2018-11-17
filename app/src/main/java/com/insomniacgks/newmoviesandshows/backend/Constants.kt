@@ -1,15 +1,15 @@
-package com.insomniacgks.newmoviesandshows.data
+package com.insomniacgks.newmoviesandshows.backend
 
 import android.util.SparseArray
 import java.util.*
 
 object Constants {
-    val BASE_POSTER_PATH = "https://image.tmdb.org/t/p/w342"
-    internal val BASE_BACKDROP_PATH = "https://image.tmdb.org/t/p/w780"
-    internal val BASE_PROFILE_IMAGE_PATH = "https://image.tmdb.org/t/p/w154"
-    val API_KEY = "<TMDB API KEY>"
-    val YOUTUBE_VIDEO_URL = "http://www.youtube.com/watch?v=%1\$s"
-    internal val YOUTUBE_THUMBNAIL_URL = "http://img.youtube.com/vi/%1\$s/0.jpg"
+    const val BASE_POSTER_PATH = "https://image.tmdb.org/t/p/w342"
+    internal const val BASE_BACKDROP_PATH = "https://image.tmdb.org/t/p/w780"
+    internal const val BASE_PROFILE_IMAGE_PATH = "https://image.tmdb.org/t/p/w154"
+    const val API_KEY = "<TMDB API KEY>"
+    const val YOUTUBE_VIDEO_URL = "http://www.youtube.com/watch?v=%1\$s"
+    internal const val YOUTUBE_THUMBNAIL_URL = "http://img.youtube.com/vi/%1\$s/0.jpg"
     private val GENRES = HashMap<String, Int>()
     private val GENRES2 = SparseArray<String>()
 
