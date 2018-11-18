@@ -1,6 +1,8 @@
 package com.insomniacgks.newmoviesandshows.activities
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.AsyncTask
@@ -33,6 +35,9 @@ import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.URL
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.net.ssl.HttpsURLConnection
 
 class MovieDetailActivity : AppCompatActivity() {
@@ -154,8 +159,44 @@ class MovieDetailActivity : AppCompatActivity() {
         val rateTV = view.findViewById<TextView>(R.id.rate_tv)
         rateTV.text = String.format("Rate %s", movie.title)
         alertDialog.setView(view)
-        alertDialog.setPositiveButton("Rate") { _, _ ->
-            createGuestSession()
+
+        alertDialog.setPositiveButton("Rate") { dialog, _ ->
+            val sp = PreferenceManager.getDefaultSharedPreferences(this@MovieDetailActivity)
+            if (!sp.getBoolean("success", false)) {
+                val status = createGuestSession()
+                if (!status) {
+                    dialog.dismiss()
+                    return@setPositiveButton
+                }
+            }
+            val expireTime = sp.getString("expires_at", "-1")
+            if (expireTime == "-1") {
+                Toast.makeText(this@MovieDetailActivity, "Couldn't complete process! Try Again.", Toast.LENGTH_LONG).show()
+                val spe = sp.edit()
+                spe.putBoolean("success", false)
+                spe.apply()
+                return@setPositiveButton
+            }
+            val currentUTCTime = getCurrentUTCTime()
+            val sdf = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.US)
+            val date1 = sdf.parse(currentUTCTime)
+            val date2 = sdf.parse(expireTime)
+            if (date1 < date2) {
+                val status = createGuestSession()
+                if (!status) {
+                    dialog.dismiss()
+                    return@setPositiveButton
+                }
+            }
+            val guestSessionId = sp.getString("guest_session_id", "-1")
+            if (guestSessionId == "-1") {
+                Toast.makeText(this@MovieDetailActivity, "Couldn't complete process! Try Again.", Toast.LENGTH_LONG).show()
+                val spe = sp.edit()
+                spe.putBoolean("success", false)
+                spe.apply()
+                return@setPositiveButton
+            }
+            RateMovie(this@MovieDetailActivity).execute(guestSessionId, String.format("%.1f", ratingBar!!.progressFloat))
         }
 
         alertDialog.setNegativeButton("Cancel") { _, _ ->
@@ -193,12 +234,18 @@ class MovieDetailActivity : AppCompatActivity() {
 
     }
 
-    private fun createGuestSession() {
-        val guestSessionId: String = GuestSession().execute().get()
-        if (guestSessionId.equals("-1")) {
-            Toast.makeText(this@MovieDetailActivity, "Failed to connect! Try Again.", Toast.LENGTH_LONG).show()
-            return
+    private fun createGuestSession(): Boolean {
+        val createGuestSession = GuestSession(this@MovieDetailActivity)
+        createGuestSession.execute()
+        while (createGuestSession.status != AsyncTask.Status.FINISHED) {
         }
+        val sp = PreferenceManager.getDefaultSharedPreferences(this@MovieDetailActivity)
+        val status = sp.getBoolean("success", false)
+        if (!status) {
+            Toast.makeText(this@MovieDetailActivity, "Failed to connect! Try Again.", Toast.LENGTH_LONG).show()
+            return false
+        }
+        return true
     }
 
     private fun initializeViews() {
@@ -243,12 +290,19 @@ class MovieDetailActivity : AppCompatActivity() {
     }
 
     @SuppressLint("StaticFieldLeak")
-    internal inner class GuestSession : AsyncTask<Void, Void, String>() {
-        override fun doInBackground(vararg params: Void?): String {
+    internal inner class GuestSession(var context: Context) : AsyncTask<Void, Void, Void>() {
+
+        override fun doInBackground(vararg params: Void?): Void? {
             val link = URL("https://api.themoviedb.org/3/authentication/guest_session/new?api_key=${Constants.API_KEY}")
             val client = link.openConnection() as HttpsURLConnection
             client.requestMethod = "GET"
             client.connect()
+            val responseCode = client.responseCode
+            val sharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+            val spe: SharedPreferences.Editor = sharedPreferences.edit()
+            if (responseCode != 200) {
+                spe.putBoolean("success", false)
+            }
             val reader = BufferedReader(InputStreamReader(client.inputStream))
             val stringBuilder = StringBuilder()
             while (true) {
@@ -257,14 +311,46 @@ class MovieDetailActivity : AppCompatActivity() {
             val jsonString = stringBuilder.toString()
             val jsonObject = JSONObject(jsonString)
             if (!jsonObject.getBoolean("success")) {
-                return "-1"
+                spe.putBoolean("success", false)
+                spe.apply()
+                return null
             }
-            return jsonObject.getString("guest_session_id")
-        }
-
-        override fun onPostExecute(result: String) {
-            super.onPostExecute(result)
+            spe.putBoolean("success", true)
+            spe.putString("guest_session_id", jsonObject.getString("guest_session_id"))
+            spe.putString("expires_at", jsonObject.getString("expires_at").substring(0, 19))
+            spe.apply()
+            return null
         }
     }
 
+    private fun getCurrentUTCTime(): String {
+        val df = DateFormat.getDateTimeInstance()
+        df.timeZone = TimeZone.getTimeZone("utc")
+        return df.format(Date())
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    internal inner class RateMovie(var context: Context) : AsyncTask<String, Void, Void>() {
+        override fun doInBackground(vararg params: String?): Void? {
+            val link = URL("https://api.themoviedb.org/3/movie/" +
+                    "${MovieDetailActivity.movie.id}" +
+                    "/rating?api_key=${Constants.API_KEY}" +
+                    "&guest_session_id=${params[0]}")
+            val client = link.openConnection() as HttpsURLConnection
+            client.requestMethod = "POST"
+            client.setRequestProperty("Content-Type", "application/json;charset=utf-8")
+            client.connect()
+            if (client.responseCode != 200) {
+                Toast.makeText(context, "Connection Failed! Try Again.", Toast.LENGTH_LONG).show()
+                return null
+            }
+            val requestBody = "{\"value\": ${params[1]}"
+            val outputStream = client.outputStream
+            outputStream.write(requestBody.toByteArray(Charsets.UTF_8))
+            outputStream.close()
+            client.disconnect()
+            Toast.makeText(context, "Rating successfully added!", Toast.LENGTH_SHORT).show()
+            return null
+        }
+    }
 }
