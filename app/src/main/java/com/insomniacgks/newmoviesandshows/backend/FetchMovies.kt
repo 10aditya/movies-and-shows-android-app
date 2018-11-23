@@ -26,7 +26,6 @@ class FetchMovies(private val url: String) : AsyncTask<Void, Void, ArrayList<Mov
             e.printStackTrace()
             null
         }
-
     }
 
     override fun onPostExecute(movieModels: ArrayList<MovieModel>) {

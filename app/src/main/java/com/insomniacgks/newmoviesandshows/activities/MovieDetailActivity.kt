@@ -14,6 +14,7 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.graphics.Palette
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
@@ -28,6 +29,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.insomniacgks.newmoviesandshows.R
 import com.insomniacgks.newmoviesandshows.backend.Constants
+import com.insomniacgks.newmoviesandshows.backend.GuestSession
 import com.insomniacgks.newmoviesandshows.fragments.*
 import com.insomniacgks.newmoviesandshows.models.MovieModel
 import com.xw.repo.BubbleSeekBar
@@ -35,12 +37,11 @@ import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.URL
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.net.ssl.HttpsURLConnection
 
-class MovieDetailActivity : AppCompatActivity() {
+class MovieDetailActivity : AppCompatActivity(), GuestSession.AsyncTaskResponse {
 
     private var ratingButton: FloatingActionButton? = null
     private var movieTitle: TextView? = null
@@ -67,7 +68,7 @@ class MovieDetailActivity : AppCompatActivity() {
         val sharedPreference = PreferenceManager.getDefaultSharedPreferences(this)
         val isDarkModeOn = sharedPreference.getBoolean("dark_mode", false)
 
-        if(isDarkModeOn){
+        if (isDarkModeOn) {
             turnOnDarkMode()
         }
 
@@ -163,40 +164,9 @@ class MovieDetailActivity : AppCompatActivity() {
         alertDialog.setPositiveButton("Rate") { dialog, _ ->
             val sp = PreferenceManager.getDefaultSharedPreferences(this@MovieDetailActivity)
             if (!sp.getBoolean("success", false)) {
-                val status = createGuestSession()
-                if (!status) {
-                    dialog.dismiss()
-                    return@setPositiveButton
-                }
-            }
-            val expireTime = sp.getString("expires_at", "-1")
-            if (expireTime == "-1") {
-                Toast.makeText(this@MovieDetailActivity, "Couldn't complete process! Try Again.", Toast.LENGTH_LONG).show()
-                val spe = sp.edit()
-                spe.putBoolean("success", false)
-                spe.apply()
-                return@setPositiveButton
-            }
-            val currentUTCTime = getCurrentUTCTime()
-            val sdf = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.US)
-            val date1 = sdf.parse(currentUTCTime)
-            val date2 = sdf.parse(expireTime)
-            if (date1 < date2) {
-                val status = createGuestSession()
-                if (!status) {
-                    dialog.dismiss()
-                    return@setPositiveButton
-                }
-            }
-            val guestSessionId = sp.getString("guest_session_id", "-1")
-            if (guestSessionId == "-1") {
-                Toast.makeText(this@MovieDetailActivity, "Couldn't complete process! Try Again.", Toast.LENGTH_LONG).show()
-                val spe = sp.edit()
-                spe.putBoolean("success", false)
-                spe.apply()
-                return@setPositiveButton
-            }
-            RateMovie(this@MovieDetailActivity).execute(guestSessionId, String.format("%.1f", ratingBar!!.progressFloat))
+                createGuestSession()
+            } else
+                processFinish()
         }
 
         alertDialog.setNegativeButton("Cancel") { _, _ ->
@@ -234,18 +204,44 @@ class MovieDetailActivity : AppCompatActivity() {
 
     }
 
-    private fun createGuestSession(): Boolean {
+    private fun createGuestSession() {
         val createGuestSession = GuestSession(this@MovieDetailActivity)
+        createGuestSession.asyncTaskResponse = this@MovieDetailActivity
         createGuestSession.execute()
-        while (createGuestSession.status != AsyncTask.Status.FINISHED) {
-        }
+    }
+
+    override fun processFinish() {
         val sp = PreferenceManager.getDefaultSharedPreferences(this@MovieDetailActivity)
         val status = sp.getBoolean("success", false)
         if (!status) {
             Toast.makeText(this@MovieDetailActivity, "Failed to connect! Try Again.", Toast.LENGTH_LONG).show()
-            return false
+            return
         }
-        return true
+        val expireTime = sp.getString("expires_at", "-1")
+        if (expireTime == "-1") {
+            Toast.makeText(this@MovieDetailActivity, "Couldn't complete process! Try Again.", Toast.LENGTH_LONG).show()
+            val spe = sp.edit()
+            spe.putBoolean("success", false)
+            spe.apply()
+            return
+        }
+        val date1 = getCurrentUTCTime()
+        val sdf = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.US)
+        val date2 = sdf.parse(expireTime)
+        if (date1 > date2) {
+            createGuestSession()
+            return
+        }
+        val guestSessionId = sp.getString("guest_session_id", "-1")
+        if (guestSessionId == "-1") {
+            Toast.makeText(this@MovieDetailActivity, "Couldn't complete process! Try Again.", Toast.LENGTH_LONG).show()
+            val spe = sp.edit()
+            spe.putBoolean("success", false)
+            spe.apply()
+            return
+        }
+        RateMovie(this@MovieDetailActivity).execute(guestSessionId, String.format("%.1f", ratingBar!!.progressFloat))
+
     }
 
     private fun initializeViews() {
@@ -266,18 +262,18 @@ class MovieDetailActivity : AppCompatActivity() {
         videos_rv = findViewById(R.id.movie_videos_rv);*/
     }
 
-    private fun turnOnDarkMode(){
-        findViewById<FrameLayout>(R.id.movie_images_fl).setBackgroundColor(ContextCompat.getColor(this,R.color.black_theme_color))
-        findViewById<FrameLayout>(R.id.movie_videos_fl).setBackgroundColor(ContextCompat.getColor(this,R.color.black_theme_color))
-        findViewById<FrameLayout>(R.id.movie_cast_fl).setBackgroundColor(ContextCompat.getColor(this,R.color.black_theme_color))
-        findViewById<FrameLayout>(R.id.movie_crew_fl).setBackgroundColor(ContextCompat.getColor(this,R.color.black_theme_color))
-        findViewById<FrameLayout>(R.id.movie_reviews_fl).setBackgroundColor(ContextCompat.getColor(this,R.color.black_theme_color))
+    private fun turnOnDarkMode() {
+        findViewById<FrameLayout>(R.id.movie_images_fl).setBackgroundColor(ContextCompat.getColor(this, R.color.black_theme_color))
+        findViewById<FrameLayout>(R.id.movie_videos_fl).setBackgroundColor(ContextCompat.getColor(this, R.color.black_theme_color))
+        findViewById<FrameLayout>(R.id.movie_cast_fl).setBackgroundColor(ContextCompat.getColor(this, R.color.black_theme_color))
+        findViewById<FrameLayout>(R.id.movie_crew_fl).setBackgroundColor(ContextCompat.getColor(this, R.color.black_theme_color))
+        findViewById<FrameLayout>(R.id.movie_reviews_fl).setBackgroundColor(ContextCompat.getColor(this, R.color.black_theme_color))
         findViewById<ImageView>(R.id.wave_layout).setImageDrawable(getDrawable(R.drawable.wave_3))
-        findViewById<View>(R.id.just_a_view).setBackgroundColor(ContextCompat.getColor(this,R.color.black_theme_color))
+        findViewById<View>(R.id.just_a_view).setBackgroundColor(ContextCompat.getColor(this, R.color.black_theme_color))
         findViewById<ImageView>(R.id.rating_view).setImageDrawable(getDrawable(R.drawable.ic_star_white_24dp))
-        findViewById<RelativeLayout>(R.id.show_overview_rl).setBackgroundColor(ContextCompat.getColor(this,R.color.black_theme_color))
+        findViewById<RelativeLayout>(R.id.show_overview_rl).setBackgroundColor(ContextCompat.getColor(this, R.color.black_theme_color))
         findViewById<TextView>(R.id.show_overview_tv).setTextColor(Color.WHITE)
-        window.statusBarColor = ContextCompat.getColor(this,R.color.colorPrimaryDarkDarkTheme)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.colorPrimaryDarkDarkTheme)
         movieTitle!!.setTextColor(Color.WHITE)
         movieReleaseDate!!.setTextColor(Color.WHITE)
         movieRatings!!.setTextColor(Color.WHITE)
@@ -289,68 +285,44 @@ class MovieDetailActivity : AppCompatActivity() {
         lateinit var movie: MovieModel
     }
 
-    @SuppressLint("StaticFieldLeak")
-    internal inner class GuestSession(var context: Context) : AsyncTask<Void, Void, Void>() {
 
-        override fun doInBackground(vararg params: Void?): Void? {
-            val link = URL("https://api.themoviedb.org/3/authentication/guest_session/new?api_key=${Constants.API_KEY}")
-            val client = link.openConnection() as HttpsURLConnection
-            client.requestMethod = "GET"
-            client.connect()
-            val responseCode = client.responseCode
-            val sharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-            val spe: SharedPreferences.Editor = sharedPreferences.edit()
-            if (responseCode != 200) {
-                spe.putBoolean("success", false)
+    private fun getCurrentUTCTime(): Date {
+        val sdfUTC = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
+        val sdfLocal = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
+        sdfUTC.timeZone = TimeZone.getTimeZone("utc")
+        return sdfLocal.parse(sdfUTC.format(Date()))
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    internal inner class RateMovie(var context: Context) : AsyncTask<String, Void, Boolean>() {
+        override fun doInBackground(vararg params: String?): Boolean {
+            try {
+                val link = URL("https://api.themoviedb.org/3/movie/" +
+                        "${MovieDetailActivity.movie.id}" +
+                        "/rating?api_key=${Constants.API_KEY}" +
+                        "&guest_session_id=${params[0]}")
+                val client = link.openConnection() as HttpsURLConnection
+                client.requestMethod = "POST"
+                client.setRequestProperty("Content-Type", "application/json;charset=utf-8")
+                client.connect()
+                val requestBody = "{\"value\": ${params[1]}}"
+                val outputStream = client.outputStream
+                outputStream.write(requestBody.toByteArray(Charsets.UTF_8))
+                outputStream.close()
+                client.disconnect()
+                return true
+            } catch (e: Exception) {
+                return false
             }
-            val reader = BufferedReader(InputStreamReader(client.inputStream))
-            val stringBuilder = StringBuilder()
-            while (true) {
-                stringBuilder.append(reader.readLine() ?: break)
-            }
-            val jsonString = stringBuilder.toString()
-            val jsonObject = JSONObject(jsonString)
-            if (!jsonObject.getBoolean("success")) {
-                spe.putBoolean("success", false)
-                spe.apply()
-                return null
-            }
-            spe.putBoolean("success", true)
-            spe.putString("guest_session_id", jsonObject.getString("guest_session_id"))
-            spe.putString("expires_at", jsonObject.getString("expires_at").substring(0, 19))
-            spe.apply()
-            return null
         }
-    }
 
-    private fun getCurrentUTCTime(): String {
-        val df = DateFormat.getDateTimeInstance()
-        df.timeZone = TimeZone.getTimeZone("utc")
-        return df.format(Date())
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    internal inner class RateMovie(var context: Context) : AsyncTask<String, Void, Void>() {
-        override fun doInBackground(vararg params: String?): Void? {
-            val link = URL("https://api.themoviedb.org/3/movie/" +
-                    "${MovieDetailActivity.movie.id}" +
-                    "/rating?api_key=${Constants.API_KEY}" +
-                    "&guest_session_id=${params[0]}")
-            val client = link.openConnection() as HttpsURLConnection
-            client.requestMethod = "POST"
-            client.setRequestProperty("Content-Type", "application/json;charset=utf-8")
-            client.connect()
-            if (client.responseCode != 200) {
+        override fun onPostExecute(result: Boolean) {
+            super.onPostExecute(result)
+            if (result) {
+                Toast.makeText(context, "Rating successfully added!", Toast.LENGTH_SHORT).show()
+            } else {
                 Toast.makeText(context, "Connection Failed! Try Again.", Toast.LENGTH_LONG).show()
-                return null
             }
-            val requestBody = "{\"value\": ${params[1]}"
-            val outputStream = client.outputStream
-            outputStream.write(requestBody.toByteArray(Charsets.UTF_8))
-            outputStream.close()
-            client.disconnect()
-            Toast.makeText(context, "Rating successfully added!", Toast.LENGTH_SHORT).show()
-            return null
         }
     }
 }
