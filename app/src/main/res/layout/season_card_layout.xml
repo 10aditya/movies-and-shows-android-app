@@ -39,6 +39,8 @@
                 android:text="TextView"
                 android:textColor="@android:color/white"
                 android:textSize="14dp"
+                android:focusable="true"
+                android:ellipsize="marquee"
                 android:textStyle="bold"
                 tools:ignore="SpUsage" />
 

@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:clipToPadding="false"
     tools:context=".activities.MovieDetailActivity">
+
     <ImageView
         android:id="@+id/movie_backdrop"
         android:layout_width="match_parent"
@@ -335,37 +336,45 @@
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp" />
 
-                     <!--
-                      <RelativeLayout
-                          android:id="@+id/movie_reviews_rl"
-                          android:layout_width="match_parent"
-                          android:layout_height="wrap_content"
-                          android:layout_below="@+id/movie_crew_rl"
-                          android:background="@android:color/white"
-                          android:paddingStart="16dp"
-                          android:paddingTop="8dp"
-                          android:paddingEnd="16dp"
-                          android:paddingBottom="8dp">
+            <FrameLayout
+                android:id="@+id/similar_movies_fl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/movie_reviews_fl"
+                android:background="@android:color/white"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"/>
+            <!--
+             <RelativeLayout
+                 android:id="@+id/movie_reviews_rl"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_below="@+id/movie_crew_rl"
+                 android:background="@android:color/white"
+                 android:paddingStart="16dp"
+                 android:paddingTop="8dp"
+                 android:paddingEnd="16dp"
+                 android:paddingBottom="8dp">
 
-                          <TextView
-                              android:id="@+id/movie_reviews_tv"
-                              android:layout_width="match_parent"
-                              android:layout_height="wrap_content"
-                              android:text="Reviews:"
-                              android:textColor="@android:color/black"
-                              android:textSize="14dp"
-                              android:textStyle="bold"
-                              tools:ignore="SpUsage" />
+                 <TextView
+                     android:id="@+id/movie_reviews_tv"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:text="Reviews:"
+                     android:textColor="@android:color/black"
+                     android:textSize="14dp"
+                     android:textStyle="bold"
+                     tools:ignore="SpUsage" />
 
-                          <android.support.v7.widget.RecyclerView
-                              android:id="@+id/movie_reviews_rv"
-                              android:layout_width="match_parent"
-                              android:layout_height="300dp"
-                              android:layout_below="@+id/movie_reviews_tv"
-                              android:layout_marginTop="8dp"
-                              android:orientation="vertical" />
-                      </RelativeLayout>
-          -->
+                 <android.support.v7.widget.RecyclerView
+                     android:id="@+id/movie_reviews_rv"
+                     android:layout_width="match_parent"
+                     android:layout_height="300dp"
+                     android:layout_below="@+id/movie_reviews_tv"
+                     android:layout_marginTop="8dp"
+                     android:orientation="vertical" />
+             </RelativeLayout>
+ -->
 
         </RelativeLayout>
     </ScrollView>
@@ -378,10 +387,10 @@
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:elevation="16dp"
-        android:padding="16dp"
-
         android:background="?attr/selectableItemBackground"
+        android:elevation="16dp"
+
+        android:padding="16dp"
         android:scaleType="fitXY"
         android:src="@drawable/ic_star_half_black_24dp" />
 

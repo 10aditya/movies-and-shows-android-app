@@ -51,7 +51,7 @@ class MoviesRecyclerViewAdapter
             holder.titleBackground.setImageResource(R.drawable.wave_3)
             holder.title.setTextColor(Color.WHITE)
         }
-        if (movie.posterURL != "null" && movie.posterURL!="") {
+        if (movie.posterURL != "null" && movie.posterURL != "") {
             holder.title.text = movie.title
             holder.title.isSelected = true
             val options = RequestOptions()

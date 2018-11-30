@@ -136,6 +136,7 @@ class MovieDetailActivity : AppCompatActivity(), GuestSession.AsyncTaskResponse 
         fragmentTransaction.replace(R.id.movie_videos_fl, VideoFragment())
         fragmentTransaction.replace(R.id.movie_crew_fl, CrewFragment())
         fragmentTransaction.replace(R.id.movie_reviews_fl, ReviewFragment())
+        fragmentTransaction.replace(R.id.similar_movies_fl, SimilarMoviesFragment())
         fragmentTransaction.commitAllowingStateLoss()
 
         ratingButton!!.bringToFront()
@@ -161,7 +162,7 @@ class MovieDetailActivity : AppCompatActivity(), GuestSession.AsyncTaskResponse 
         rateTV.text = String.format("Rate %s", movie.title)
         alertDialog.setView(view)
 
-        alertDialog.setPositiveButton("Rate") { dialog, _ ->
+        alertDialog.setPositiveButton("Rate") { _, _ ->
             val sp = PreferenceManager.getDefaultSharedPreferences(this@MovieDetailActivity)
             if (!sp.getBoolean("success", false)) {
                 createGuestSession()
@@ -268,6 +269,7 @@ class MovieDetailActivity : AppCompatActivity(), GuestSession.AsyncTaskResponse 
         findViewById<FrameLayout>(R.id.movie_cast_fl).setBackgroundColor(ContextCompat.getColor(this, R.color.black_theme_color))
         findViewById<FrameLayout>(R.id.movie_crew_fl).setBackgroundColor(ContextCompat.getColor(this, R.color.black_theme_color))
         findViewById<FrameLayout>(R.id.movie_reviews_fl).setBackgroundColor(ContextCompat.getColor(this, R.color.black_theme_color))
+        findViewById<FrameLayout>(R.id.similar_movies_fl).setBackgroundColor(ContextCompat.getColor(this, R.color.black_theme_color))
         findViewById<ImageView>(R.id.wave_layout).setImageDrawable(getDrawable(R.drawable.wave_3))
         findViewById<View>(R.id.just_a_view).setBackgroundColor(ContextCompat.getColor(this, R.color.black_theme_color))
         findViewById<ImageView>(R.id.rating_view).setImageDrawable(getDrawable(R.drawable.ic_star_white_24dp))
