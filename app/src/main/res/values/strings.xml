@@ -47,4 +47,9 @@
     <string name="search">Search</string>
     <string name="no_data_available">No Data Available!</string>
     <string name="dark_mode">Dark Mode</string>
+
+    <string name="title_activity_image_viewer">ImageViewerActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="rate">Rate</string>
 </resources>
