@@ -3,7 +3,7 @@ This is Android Application for TMDB API.
 
 ### [Playstore Link](https://play.google.com/store/apps/details?id=com.insomniacgks.newmoviesandshows)
 
-Paste your TMDB API key in [`Constants.java`](https://github.com/10aditya/movies-and-shows-android-app/blob/master/app/src/main/java/com/insomniacgks/newmoviesandshows/data/Constants.java)
+Paste your TMDB API key in [`Constants.kt`](https://github.com/10aditya/movies-and-shows-android-app/blob/master/app/src/main/java/com/insomniacgks/newmoviesandshows/data/Constants.kt)
 
 Snapshots from the app:
 
